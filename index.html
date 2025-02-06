@@ -71,23 +71,25 @@
         </div>
         <div>
           <label class="block text-sm font-medium mb-1">Income ($):</label>
-          <input tyape="number" id="income" value="80000" class="w-full p-2 border rounded" oninput="calculateTaxes()">
+          <input type="number" id="income" value="80000" class="w-full p-2 border rounded" oninput="calculateTaxes()">
         </div>
       </div>
-          <h4 class="font-medium mb-2">&nbsp;</h4>
-      <div class="grid grid-cols-3 gap-4">
+    </div>
+	
+    <!-- Tax Summary -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="grid grid-cols-2 gap-4">
         <div class="p-4 rounded current-cell">
           <h4 class="font-medium mb-2">Current Tax</h4>
           <div id="currentTax" class="text-xl"></div>
         </div>
-        <div class="p-4 rounded current-cell">
+        <div class="p-4 rounded new-cell">
           <h4 class="font-medium mb-2">New Tax (After Cut)</h4>
           <div id="newTax" class="text-xl"></div>
         </div>
-		<div class="p-4 rounded new-cell">
-          <h4 class="font-medium mb-2">Annual Savings</h4>
-          <div id="savings" class="text-xl"></div>
-        </div>
+      </div>
+      <div class="text-center mt-4 text-xl font-medium">
+        Annual Savings: $<span id="savings"></span>
       </div>
     </div>
 
