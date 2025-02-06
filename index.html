@@ -1,108 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tax Savings Calculator</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .tax-box { border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px; }
-        .highlight { background-color: #f8f9fa; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tax Savings Calculator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .tax-box { border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px; }
+    .highlight { background-color: #f8f9fa; }
+  </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Tax Savings Calculator</h1>
-        
-        <div class="mb-3">
-            <label class="form-label">Total Tax Cut (X in billions):</label>
-            <input type="number" id="taxCut" class="form-control" placeholder="e.g., 100">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Marital Status:</label>
-            <select id="maritalStatus" class="form-select">
-                <option value="single">Single</option>
-                <option value="married">Married (Jointly)</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Income ($):</label>
-            <input type="number" id="income" class="form-control" placeholder="e.g., 80000">
-        </div>
-
-        <button class="btn btn-primary" onclick="calculateSavings()">Calculate</button>
-
-        <div id="results" class="mt-4">
-            <div class="row">
-                <div class="col-md-6 tax-box highlight">
-                    <h4>Current Tax</h4>
-                    <div id="currentTax"></div>
-                </div>
-                <div class="col-md-6 tax-box">
-                    <h4>New Tax (After Cut)</h4>
-                    <div id="newTax"></div>
-                </div>
-            </div>
-            <h4 class="mt-3">Annual Savings: $<span id="savings">0</span></h4>
-        </div>
+  <div class="container mt-5">
+    <h1 class="mb-4">Tax Savings Calculator</h1>
+    
+    <div class="mb-3">
+      <label class="form-label">Total Tax Cut (X in billions):</label>
+      <!-- Set a default value for tax cut -->
+      <input type="number" id="taxCut" class="form-control" placeholder="e.g., 100" value="100">
     </div>
 
-    <script>
-        // Example 2023 Tax Brackets (Replace with actual IRS data)
-        const brackets = {
-            single: [
-                { min: 0, max: 10275, rate: 0.10 },
-                { min: 10275, max: 41775, rate: 0.12 },
-                { min: 41775, max: 89075, rate: 0.22 },
-                { min: 89075, max: 170050, rate: 0.24 },
-                { min: 170050, max: 215950, rate: 0.32 },
-                { min: 215950, max: 539900, rate: 0.35 },
-                { min: 539900, max: Infinity, rate: 0.37 }
-            ],
-            married: [
-                { min: 0, max: 20550, rate: 0.10 },
-                { min: 20550, max: 83550, rate: 0.12 },
-                { min: 83550, max: 178150, rate: 0.22 },
-                { min: 178150, max: 340100, rate: 0.24 },
-                { min: 340100, max: 431900, rate: 0.32 },
-                { min: 431900, max: 647850, rate: 0.35 },
-                { min: 647850, max: Infinity, rate: 0.37 }
-            ]
-        };
+    <div class="mb-3">
+      <label class="form-label">Marital Status:</label>
+      <select id="maritalStatus" class="form-select">
+        <option value="single">Single</option>
+        <option value="married">Married (Jointly)</option>
+      </select>
+    </div>
 
-        function calculateTax(income, brackets) {
-            let tax = 0;
-            for (const bracket of brackets) {
-                if (income <= bracket.min) break;
-                const taxable = Math.min(income - bracket.min, bracket.max - bracket.min);
-                tax += taxable * bracket.rate;
-            }
-            return tax;
-        }
+    <div class="mb-3">
+      <label class="form-label">Income ($):</label>
+      <!-- Set a default value for income -->
+      <input type="number" id="income" class="form-control" placeholder="e.g., 80000" value="80000">
+    </div>
 
-        // Simplified: Reduce all rates by 2% for demo (replace with your logic)
-        function calculateNewTax(income, brackets) {
-            const adjustedBrackets = brackets.map(bracket => ({
-                ...bracket,
-                rate: bracket.rate - 0.02 // Placeholder: Implement X billion logic here
-            }));
-            return calculateTax(income, adjustedBrackets);
-        }
+    <!-- Removed the manual Calculate button; updates now occur automatically -->
 
-        function calculateSavings() {
-            const maritalStatus = document.getElementById('maritalStatus').value;
-            const income = parseFloat(document.getElementById('income').value);
-            const taxCut = parseFloat(document.getElementById('taxCut').value);
+    <div id="results" class="mt-4">
+      <div class="row">
+        <div class="col-md-6 tax-box highlight">
+          <h4>Current Tax</h4>
+          <div id="currentTax"></div>
+        </div>
+        <div class="col-md-6 tax-box">
+          <h4>New Tax (After Cut)</h4>
+          <div id="newTax"></div>
+        </div>
+      </div>
+      <h4 class="mt-3">Annual Savings: $<span id="savings">0</span></h4>
+    </div>
+  </div>
 
-            const current = calculateTax(income, brackets[maritalStatus]);
-            const newTax = calculateNewTax(income, brackets[maritalStatus]);
-            
-            document.getElementById('currentTax').textContent = `$${current.toFixed(2)}`;
-            document.getElementById('newTax').textContent = `$${newTax.toFixed(2)}`;
-            document.getElementById('savings').textContent = (current - newTax).toFixed(2);
-        }
-    </script>
+  <script>
+    // Example 2023 Tax Brackets (Replace with actual IRS data)
+    const brackets = {
+      single: [
+        { min: 0, max: 10275, rate: 0.10 },
+        { min: 10275, max: 41775, rate: 0.12 },
+        { min: 41775, max: 89075, rate: 0.22 },
+        { min: 89075, max: 170050, rate: 0.24 },
+        { min: 170050, max: 215950, rate: 0.32 },
+        { min: 215950, max: 539900, rate: 0.35 },
+        { min: 539900, max: Infinity, rate: 0.37 }
+      ],
+      married: [
+        { min: 0, max: 20550, rate: 0.10 },
+        { min: 20550, max: 83550, rate: 0.12 },
+        { min: 83550, max: 178150, rate: 0.22 },
+        { min: 178150, max: 340100, rate: 0.24 },
+        { min: 340100, max: 431900, rate: 0.32 },
+        { min: 431900, max: 647850, rate: 0.35 },
+        { min: 647850, max: Infinity, rate: 0.37 }
+      ]
+    };
+
+    function calculateTax(income, brackets) {
+      let tax = 0;
+      for (const bracket of brackets) {
+        if (income <= bracket.min) break;
+        const taxable = Math.min(income - bracket.min, bracket.max - bracket.min);
+        tax += taxable * bracket.rate;
+      }
+      return tax;
+    }
+
+    // Simplified: Reduce all rates by 2% for demo (replace with your logic based on the X billion cut)
+    function calculateNewTax(income, brackets) {
+      const adjustedBrackets = brackets.map(bracket => ({
+        ...bracket,
+        rate: bracket.rate - 0.02 // Placeholder: Implement X billion logic here
+      }));
+      return calculateTax(income, adjustedBrackets);
+    }
+
+    function calculateSavings() {
+      const maritalStatus = document.getElementById('maritalStatus').value;
+      const income = parseFloat(document.getElementById('income').value);
+      const taxCut = parseFloat(document.getElementById('taxCut').value);
+
+      const current = calculateTax(income, brackets[maritalStatus]);
+      const newTax = calculateNewTax(income, brackets[maritalStatus]);
+      
+      document.getElementById('currentTax').textContent = `$${current.toFixed(2)}`;
+      document.getElementById('newTax').textContent = `$${newTax.toFixed(2)}`;
+      document.getElementById('savings').textContent = (current - newTax).toFixed(2);
+    }
+
+    // Attach event listeners for real-time calculation
+    document.getElementById('taxCut').addEventListener('input', calculateSavings);
+    document.getElementById('income').addEventListener('input', calculateSavings);
+    document.getElementById('maritalStatus').addEventListener('change', calculateSavings);
+
+    // Run an initial calculation on page load
+    calculateSavings();
+  </script>
 </body>
 </html>
