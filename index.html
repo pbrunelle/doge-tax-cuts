@@ -28,29 +28,41 @@
     .new-cell {
       background-color: #e3f2fd;
     }
-  </style>
+
+  .bg-light-blue {
+    background-color: #e0f2f7; /* Example: Light Blue */
+    color: #1a2027; /* Dark Blue Text for contrast on light blue */
+  }
+
+  .bg-selected-blue {
+    background-color: #e3f2fd; /* Selected Blue */
+    color: #1a2027; /* Dark Blue Text for contrast on light blue */
+  }
+
+  .text-dark-blue {
+    color: #1a2027;
+  }
+</style>
 </head>
 <body class="bg-gray-50">
   <div class="max-w-4xl mx-auto p-6 space-y-6">
-    <!-- Tax Cut Options -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-xl font-bold mb-4">How Much Federal Spending Will DOGE Cut?</h2>
-      <div class="grid grid-cols-3 gap-4 mb-4">
-        <button onclick="setTaxCut(20)" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-700">$20B</button>
-        <button onclick="setTaxCut(100)" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-700">$100B</button>
-        <button onclick="setTaxCut(1000)" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-700">$1T</button>
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">Total Tax Cut (X in billions):</label>
-        <input type="number" id="taxCut" value="10" class="w-full p-2 border rounded" oninput="calculateTaxes()">
-      </div>
-    </div>
+    <!-- Tax Cut Options -->	
+
+
+	<div class="bg-white rounded-lg shadow p-6">
+	  <h2 class="text-xl font-bold mb-4">How Much Federal Spending Will DOGE Cut?</h2>
+	  <div class="grid grid-cols-3 gap-4 mb-4">
+		<button onclick="setTaxCut(20)" id="btn20" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$20B</button>
+		<button onclick="setTaxCut(100)" id="btn100" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200 selected">$100B</button>
+		<button onclick="setTaxCut(1000)" id="btn1000" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$1T</button>
+	  </div>
+	</div>
 
     <!-- Input Fields -->
     <div class="bg-white rounded-lg shadow p-6">
-      <div class="space-y-4">
+	  <h2 class="text-xl font-bold mb-4">How Much Will You Save?</h2>
+      <div class="grid grid-cols-2 gap-6">
         <div>
-		  <h2 class="text-xl font-bold mb-4">How Much Will You Save?</h2>
           <label class="block text-sm font-medium mb-1">Marital Status:</label>
           <select id="maritalStatus" class="w-full p-2 border rounded" oninput="calculateTaxes()">
             <option value="single">Single</option>
@@ -63,7 +75,7 @@
         </div>
       </div>
     </div>
-
+	
     <!-- Tax Summary -->
     <div class="bg-white rounded-lg shadow p-6">
       <div class="grid grid-cols-2 gap-4">
@@ -144,7 +156,21 @@
       }));
     }
 
-    function setTaxCut(amount) {
+    function setTaxCut(amount) {		
+		    const buttons = document.querySelectorAll('[id^="btn"]');
+    buttons.forEach(button => {
+      button.classList.remove('bg-selected-blue', 'hover:bg-blue-200');
+      button.classList.add('bg-light-blue', 'hover:bg-blue-200', 'text-dark-blue'); // Added text color reset
+    });
+
+    let selectedButtonId = "btn" + amount;
+    const clickedButton = document.getElementById(selectedButtonId);
+    if (clickedButton) {
+      clickedButton.classList.remove('bg-light-blue', 'hover:bg-blue-200', 'text-dark-blue');
+      clickedButton.classList.add('bg-selected-blue', 'hover:bg-blue-200');
+      selectedButton = clickedButton;
+    }
+  
       document.getElementById('taxCut').value = amount;
       calculateTaxes();
     }
