@@ -10,7 +10,7 @@
       font-family: 'Inter', sans-serif;
       background-color: #f4f7fa;
     }
-    .container {
+    .container-main {
       max-width: 700px;
       margin: 30px auto;
       background: white;
@@ -19,13 +19,7 @@
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     }
     .section {
-      padding: 20px 0;
-      margin-bottom: 20px;
-      border-bottom: 2px dashed #ccc;
-    }
-    .section:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
+      margin-bottom: 30px;
     }
     .tax-box {
       background: #ffffff;
@@ -54,52 +48,58 @@
     h1, h4 {
       color: #333;
     }
-    .breakdown-row {
-      font-size: 0.9rem;
-      border-bottom: 1px solid #ddd;
-      padding: 5px 0;
+    .breakdown-table th, .breakdown-table td {
+      padding: 6px;
+      border: 1px solid #ddd;
+      font-size: 0.85rem;
     }
-    .breakdown-header {
-      font-weight: bold;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 5px;
-      margin-bottom: 10px;
+    .breakdown-table th {
+      background-color: #f0f0f0;
+      text-align: center;
+    }
+    .breakdown-table td {
+      text-align: center;
+      white-space: nowrap;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Section 1: Tax Cut Options -->
-    <div class="section text-center">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="tax-option" onclick="setTaxCut(20)">$20B</div>
-        </div>
-        <div class="col-md-4">
-          <div class="tax-option" onclick="setTaxCut(100)">$100B</div>
-        </div>
-        <div class="col-md-4">
-          <div class="tax-option" onclick="setTaxCut(1000)">$1T</div>
+  <div class="container-main">
+    <!-- Section 1: Tax Cut Options & Total Tax Cut Input -->
+    <div class="section">
+      <div class="text-center mb-3">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="tax-option" onclick="setTaxCut(20)">$20B</div>
+          </div>
+          <div class="col-md-4">
+            <div class="tax-option" onclick="setTaxCut(100)">$100B</div>
+          </div>
+          <div class="col-md-4">
+            <div class="tax-option" onclick="setTaxCut(1000)">$1T</div>
+          </div>
         </div>
       </div>
-    </div>
-
-    <!-- Section 2: User Input -->
-    <div class="section">
       <label class="form-label">Total Tax Cut (X in billions):</label>
       <input type="number" id="taxCut" class="form-control" placeholder="e.g., 100" value="10" />
+    </div>
+  </div>
 
-      <label class="form-label mt-3">Marital Status:</label>
+  <div class="container-main">
+    <!-- Section 2: Other User Inputs -->
+    <div class="section">
+      <label class="form-label">Marital Status:</label>
       <select id="maritalStatus" class="form-select">
         <option value="single">Single</option>
         <option value="married" selected>Married (Jointly)</option>
       </select>
-
       <label class="form-label mt-3">Income ($):</label>
       <input type="number" id="income" class="form-control" placeholder="e.g., 80000" value="80000" />
     </div>
-
-    <!-- Section 3: Savings Output -->
+  </div>
+  
+  <div class="container-main">
+    <!-- Section 3: Summary Savings Output -->
     <div class="section">
       <div class="row">
         <div class="col-md-6 tax-box highlight">
@@ -111,9 +111,7 @@
           <div id="newTax">$7,589.00</div>
         </div>
       </div>
-      <h4 class="mt-3 text-center">
-        Annual Savings: $<span id="savings">1,600.00</span>
-      </h4>
+      <h4 class="mt-3 text-center">Annual Savings: $<span id="savings">1,600.00</span></h4>
     </div>
 
     <!-- Section 4: Detailed Tax Breakdown -->
@@ -121,11 +119,15 @@
       <div class="row">
         <div class="col-md-6 tax-box">
           <h4 class="text-center">Current Tax Breakdown</h4>
-          <div id="breakdownCurrent"></div>
+          <table class="table breakdown-table" id="breakdownCurrent">
+            <!-- Table content will be injected here -->
+          </table>
         </div>
         <div class="col-md-6 tax-box">
           <h4 class="text-center">New Tax Breakdown</h4>
-          <div id="breakdownNew"></div>
+          <table class="table breakdown-table" id="breakdownNew">
+            <!-- Table content will be injected here -->
+          </table>
         </div>
       </div>
     </div>
@@ -155,43 +157,61 @@
     };
 
     // Compute the tax breakdown for an income given an array of brackets
+    // For each bracket, we calculate:
+    // - Bracket index (starting from 1)
+    // - Combined Income Range (min - max)
+    // - Taxable Amount (the amount taxed in that bracket)
+    // - Rate (as percentage)
+    // - Tax for that bracket
     function calculateBracketTax(income, brackets) {
       let remaining = income;
       let breakdown = [];
+      let index = 1;
       for (const bracket of brackets) {
         if (income > bracket.min) {
           const taxable = Math.min(remaining, bracket.max - bracket.min);
           const tax = taxable * bracket.rate;
           breakdown.push({
+            bracket: index,
             range: `${bracket.min.toLocaleString()} - ${bracket.max === Infinity ? '∞' : bracket.max.toLocaleString()}`,
+            taxable: taxable,
             rate: (bracket.rate * 100).toFixed(0) + '%',
             tax: tax
           });
           remaining -= taxable;
+          index++;
           if (remaining <= 0) break;
         }
       }
       return breakdown;
     }
 
-    // Render the breakdown in an element
+    // Render the breakdown into a table with 5 columns:
+    // Columns: Bracket, Income Range, Taxable, Rate, Tax
     function renderBreakdown(breakdown, elementId) {
-      let html = `<div class="breakdown-header row">
-                    <div class="col-4">Rate</div>
-                    <div class="col-4">Range</div>
-                    <div class="col-4 text-end">Tax</div>
-                  </div>`;
+      let html = `<thead>
+                    <tr>
+                      <th>Bracket</th>
+                      <th>Range</th>
+                      <th>Taxable</th>
+                      <th>Rate</th>
+                      <th>Tax</th>
+                    </tr>
+                  </thead><tbody>`;
       breakdown.forEach(item => {
-        html += `<div class="row breakdown-row">
-                    <div class="col-4">${item.rate}</div>
-                    <div class="col-4">${item.range}</div>
-                    <div class="col-4 text-end">$${item.tax.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
-                 </div>`;
+        html += `<tr>
+                   <td>${item.bracket}</td>
+                   <td>${item.range}</td>
+                   <td>$${item.taxable.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                   <td>${item.rate}</td>
+                   <td>$${item.tax.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                 </tr>`;
       });
+      html += `</tbody>`;
       document.getElementById(elementId).innerHTML = html;
     }
 
-    // For new tax, reduce each bracket rate by 2 percentage points
+    // For new tax, reduce each bracket rate by 2 percentage points (but not below 0)
     function adjustBrackets(brackets) {
       return brackets.map(b => ({
         min: b.min,
@@ -205,12 +225,12 @@
       calculateSavings();
     }
 
-    // Event listeners for input changes
+    // Add event listeners to update calculations on input changes
     document.querySelectorAll('#taxCut, #maritalStatus, #income').forEach(input => {
       input.addEventListener('input', calculateSavings);
     });
 
-    // Simple overall tax calculation for summary (for demo purposes)
+    // Simple overall tax calculation for summary (for demonstration)
     function calculateTax(income, rate) {
       return income * rate;
     }
@@ -220,7 +240,7 @@
       const maritalStatus = document.getElementById('maritalStatus').value;
       const selectedBrackets = taxBrackets[maritalStatus];
 
-      // Summary overall taxes (using flat rates for the summary display)
+      // Summary overall taxes (using flat rates for demonstration)
       const currentTaxTotal = calculateTax(income, 0.22);
       const newTaxTotal = calculateTax(income, 0.20);
 
@@ -231,7 +251,7 @@
       document.getElementById('savings').textContent =
         (currentTaxTotal - newTaxTotal).toLocaleString('en-US', { minimumFractionDigits: 2 });
 
-      // Detailed breakdown calculations
+      // Detailed breakdown
       const currentBreakdown = calculateBracketTax(income, selectedBrackets);
       const newBreakdown = calculateBracketTax(income, adjustBrackets(selectedBrackets));
 
