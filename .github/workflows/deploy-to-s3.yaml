@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: aws-actions/configure-aws-credentials@v2
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY_ID}}
           aws-region: us-east-2
       - run: |
-          aws cp index.html s3://usaid-costs-you/ --recursive
+          aws s3 cp index.html s3://usaid-costs-you/ --recursive
