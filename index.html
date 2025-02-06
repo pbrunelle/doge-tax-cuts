@@ -101,11 +101,11 @@
       const current = calculateTax(income, brackets[maritalStatus]);
       const newTax = calculateNewTax(income, brackets[maritalStatus]);
       
-      document.getElementById('currentTax').textContent = `$${current.toFixed(2)}`;
-      document.getElementById('newTax').textContent = `$${newTax.toFixed(2)}`;
-      document.getElementById('savings').textContent = (current - newTax).toFixed(2);
+      document.getElementById('currentTax').textContent = `$${current.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      document.getElementById('newTax').textContent = `$${newTax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      document.getElementById('savings').textContent = (current - newTax).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
-
+    
     // Attach event listeners for real-time calculation
     document.getElementById('taxCut').addEventListener('input', calculateSavings);
     document.getElementById('income').addEventListener('input', calculateSavings);
