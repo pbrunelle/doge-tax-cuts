@@ -122,7 +122,7 @@
         <button onclick="setTaxCut(100, 'desktop')" id="btn100Desktop" class="bg-selected-blue text-white px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$100B</button>
         <button onclick="setTaxCut(1000, 'desktop')" id="btn1000Desktop" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$1T</button>
       </div>
-      <input type="hidden" id="taxCut" value="100">
+      <input type="hidden" id="taxCutDesktop" value="100">
     </div>
 
     <!-- Input Fields -->
@@ -131,18 +131,18 @@
       <div class="grid grid-cols-3 gap-6">
         <div>
           <label class="block text-sm font-medium mb-1">Marital Status:</label>
-          <select id="maritalStatus" class="w-full p-2 border rounded" oninput="calculateTaxes(this.value)">
+          <select id="maritalStatusDesktop" class="w-full p-2 border rounded" oninput="calculateTaxes('desktop')">
             <option value="single">Single</option>
             <option value="married" selected>Married (Jointly)</option>
           </select>
         </div>
         <div>
           <label class="block text-sm font-medium mb-1">Income ($):</label>
-          <input type="text" id="income" value="100,000" class="w-full p-2 border rounded" oninput="formatAndCalculate()">
+          <input type="text" id="incomeDesktop" value="100,000" class="w-full p-2 border rounded" oninput="formatAndCalculate('desktop')">
         </div>
         <div>
           <label class="block text-sm font-medium mb-1">Tax Reduction:</label>
-          <select id="taxReduction" class="w-full p-2 border rounded" oninput="calculateTaxes()">
+          <select id="taxReductionDesktop" class="w-full p-2 border rounded" oninput="calculateTaxes('desktop')">
             <option value="all" selected>All Brackets</option>
             <option value="top4">Top 4 Brackets</option>
           </select>
@@ -155,15 +155,15 @@
       <div class="grid grid-cols-3 gap-4">
         <div class="p-4 rounded current-cell">
           <h4 class="font-medium mb-2">Current Tax</h4>
-          <div id="currentTax" class="text-xl"></div>
+          <div id="currentTaxDesktop" class="text-xl"></div>
         </div>
         <div class="p-4 rounded new-cell">
           <h4 class="font-medium mb-2">New Tax (After Cut)</h4>
-          <div id="newTax" class="text-xl"></div>
+          <div id="newTaxDesktop" class="text-xl"></div>
         </div>
         <div class="p-4 rounded savings-cell">
           <h4 class="font-medium mb-2">Annual Savings</h4>
-          <div id="savings" class="text-xl"></div>
+          <div id="savingsDesktop" class="text-xl"></div>
         </div>
       </div>
     </div>
@@ -172,7 +172,7 @@
     <div class="bg-white rounded-lg shadow p-6">
       <h2 class="text-xl font-bold mb-4">Detailed Tax Breakdown</h2>
       <div class="overflow-x-auto">
-        <table class="w-full breakdown-table" id="breakdownTable"></table>
+        <table class="w-full breakdown-table" id="breakdownTableDesktop"></table>
       </div>
     </div>
   </div>
@@ -190,7 +190,7 @@
         <button onclick="setTaxCut(100, 'mobile')" id="btn100Mobile" class="bg-selected-blue text-white px-2 py-3 rounded-lg text-lg font-bold">$100B</button>
         <button onclick="setTaxCut(1000, 'mobile')" id="btn1000Mobile" class="bg-light-blue text-dark-blue px-2 py-3 rounded-lg text-lg font-bold">$1T</button>
       </div>
-      <input type="hidden" id="taxCut" value="100">
+      <input type="hidden" id="taxCutMobile" value="100">
     </div>
 
     <!-- Input Fields -->
@@ -198,18 +198,18 @@
       <div class="space-y-3">
         <div>
           <label class="block text-sm font-medium mb-1">Marital Status:</label>
-          <select id="maritalStatus" class="w-full p-2 border rounded text-lg" oninput="calculateTaxes(this.value)">
+          <select id="maritalStatusMobile" class="w-full p-2 border rounded text-lg" oninput="calculateTaxes('mobile')">
             <option value="single">Single</option>
             <option value="married" selected>Married (Jointly)</option>
           </select>
         </div>
         <div>
           <label class="block text-sm font-medium mb-1">Income ($):</label>
-          <input type="text" id="income" value="100,000" class="w-full p-2 border rounded text-lg" oninput="formatAndCalculate()">
+          <input type="text" id="incomeMobile" value="100,000" class="w-full p-2 border rounded text-lg" oninput="formatAndCalculate('mobile')">
         </div>
         <div>
           <label class="block text-sm font-medium mb-1">Tax Reduction:</label>
-          <select id="taxReduction" class="w-full p-2 border rounded text-lg" oninput="calculateTaxes()">
+          <select id="taxReductionMobile" class="w-full p-2 border rounded text-lg" oninput="calculateTaxes('mobile')">
             <option value="all" selected>All Brackets</option>
             <option value="top4">Top 4 Brackets</option>
           </select>
@@ -365,12 +365,12 @@
         button.classList.add('bg-selected-blue', 'text-white');
       });
 
-      document.getElementById('taxCut').value = amount;
-      calculateTaxes();
+      document.getElementById(`taxCut${device.charAt(0).toUpperCase() + device.slice(1)}`).value = amount;
+      calculateTaxes(device);
     }
 
-    function renderBreakdownTable(currentBreakdown, newBreakdown) {
-      const table = document.getElementById('breakdownTable');
+    function renderBreakdownTable(currentBreakdown, newBreakdown, device) {
+      const table = document.getElementById(`breakdownTable${device.charAt(0).toUpperCase() + device.slice(1)}`);
       let html = `
         <thead>
           <tr>
@@ -487,37 +487,37 @@
       return { totalCurrentTax, totalNewTax };
     }
 
-    function formatAndCalculate() {
-      formatIncome();
-      calculateTaxes();
+    function formatAndCalculate(device) {
+      formatIncome(device);
+      calculateTaxes(device);
     }
 
-    function formatIncome() {
-      const incomeField = document.getElementById('income');
+    function formatIncome(device) {
+      const incomeField = document.getElementById(`income${device.charAt(0).toUpperCase() + device.slice(1)}`);
       let value = incomeField.value.replace(/,/g, '');
       if (!isNaN(value) && value !== '') {
         incomeField.value = parseFloat(value).toLocaleString('en-US');
       }
     }
 
-    function calculateTaxes(maritalStatus) {
-      const incomeField = document.getElementById('income');
+    function calculateTaxes(device) {
+      const incomeField = document.getElementById(`income${device.charAt(0).toUpperCase() + device.slice(1)}`);
       let income = parseFloat(incomeField.value.replace(/,/g, '')) || 0;
-      const selectedBrackets = TAX_BRACKETS[maritalStatus];
-      const taxCut = parseFloat(document.getElementById('taxCut').value);
-      const reductionType = document.getElementById('taxReduction').value;
+      const selectedBrackets = TAX_BRACKETS[document.getElementById(`maritalStatus${device.charAt(0).toUpperCase() + device.slice(1)}`).value];
+      const taxCut = parseFloat(document.getElementById(`taxCut${device.charAt(0).toUpperCase() + device.slice(1)}`).value);
+      const reductionType = document.getElementById(`taxReduction${device.charAt(0).toUpperCase() + device.slice(1)}`).value;
 
       const currentBreakdown = calculateBracketTax(income, selectedBrackets);
       const newBreakdown = calculateBracketTax(income, adjustBrackets(selectedBrackets, taxCut, reductionType));
       
-      const { totalCurrentTax, totalNewTax } = renderBreakdownTable(currentBreakdown, newBreakdown);
+      const { totalCurrentTax, totalNewTax } = renderBreakdownTable(currentBreakdown, newBreakdown, device);
       renderBreakdownTableMobile(currentBreakdown, newBreakdown);
 
-      document.getElementById('currentTax').textContent = 
+      document.getElementById(`currentTax${device.charAt(0).toUpperCase() + device.slice(1)}`).textContent = 
         `$${Math.round(totalCurrentTax).toLocaleString('en-US')}`;
-      document.getElementById('newTax').textContent = 
+      document.getElementById(`newTax${device.charAt(0).toUpperCase() + device.slice(1)}`).textContent = 
         `$${Math.round(totalNewTax).toLocaleString('en-US')}`;
-      document.getElementById('savings').textContent = 
+      document.getElementById(`savings${device.charAt(0).toUpperCase() + device.slice(1)}`).textContent = 
         `$${Math.round(totalCurrentTax - totalNewTax).toLocaleString('en-US')}`;
 
       document.getElementById('currentTaxMobile').textContent = 
@@ -529,7 +529,7 @@
     }
 
     // Initialize calculations on page load
-    window.onload = () => calculateTaxes(document.getElementById('maritalStatus').value);
+    window.onload = () => calculateTaxes('desktop');
 
     // Get the modal
     var modal = document.getElementById("infoModal");
