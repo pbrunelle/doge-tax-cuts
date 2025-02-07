@@ -132,6 +132,12 @@
       ]
     };
 
+    // https://www.cbo.gov/budget-options/58634
+    // Raise all tax rates on ordinary income by 1 percentage point
+    // Under the first alternative, all statutory tax rates on ordinary income (income subject to the regular rate schedule) would increase by 1 percentage point. For example, in 2023, the top rate of 37 percent would increase to 38 percent, and in 2026, the top rate of 39.6 percent would increase to 40.6 percent.
+    // 2025 = $111.3B
+    const REVENUE_REDUCTION_PER_PERCENT = 111.3;
+
     function calculateBracketTax(income, brackets) {
       let remaining = income;
       let breakdown = [];
@@ -156,11 +162,12 @@
       return breakdown;
     }
 
-    function adjustBrackets(brackets) {
+    function adjustBrackets(brackets, savings) {
+      const rateReduction = savings / REVENUE_REDUCTION_PER_PERCENT / 100;
       return brackets.map(b => ({
         min: b.min,
         max: b.max,
-        rate: Math.max(b.rate - 0.02, 0)
+        rate: Math.max(b.rate - rateReduction, 0)
       }));
     }
 
@@ -258,9 +265,10 @@
       let income = parseFloat(incomeField.value.replace(/,/g, '')) || 0;
       const maritalStatus = document.getElementById('maritalStatus').value;
       const selectedBrackets = TAX_BRACKETS[maritalStatus];
+      const taxCut = parseFloat(document.getElementById('taxCut').value);
 
       const currentBreakdown = calculateBracketTax(income, selectedBrackets);
-      const newBreakdown = calculateBracketTax(income, adjustBrackets(selectedBrackets));
+      const newBreakdown = calculateBracketTax(income, adjustBrackets(selectedBrackets, taxCut));
       
       const { totalCurrentTax, totalNewTax } = renderBreakdownTable(currentBreakdown, newBreakdown);
 
