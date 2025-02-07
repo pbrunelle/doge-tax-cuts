@@ -118,9 +118,9 @@
     <div class="bg-white rounded-lg shadow p-6">
       <h2 class="text-xl font-bold mb-4">How Much Federal Spending Will DOGE Cut?</h2>
       <div class="grid grid-cols-3 gap-4 mb-4">
-        <button onclick="setTaxCut(20)" id="btn20" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$20B</button>
-        <button onclick="setTaxCut(100)" id="btn100" class="bg-selected-blue text-white px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$100B</button>
-        <button onclick="setTaxCut(1000)" id="btn1000" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$1T</button>
+        <button onclick="setTaxCut(20, 'desktop')" id="btn20Desktop" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$20B</button>
+        <button onclick="setTaxCut(100, 'desktop')" id="btn100Desktop" class="bg-selected-blue text-white px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$100B</button>
+        <button onclick="setTaxCut(1000, 'desktop')" id="btn1000Desktop" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$1T</button>
       </div>
       <input type="hidden" id="taxCut" value="100">
     </div>
@@ -186,9 +186,9 @@
     <div class="bg-white rounded-lg shadow p-4">
       <h2 class="text-lg font-bold mb-3">Federal Spending Cut</h2>
       <div class="grid grid-cols-3 gap-2">
-        <button onclick="setTaxCut(20)" id="btn20" class="bg-light-blue text-dark-blue px-2 py-3 rounded-lg text-lg font-bold">$20B</button>
-        <button onclick="setTaxCut(100)" id="btn100" class="bg-selected-blue text-white px-2 py-3 rounded-lg text-lg font-bold">$100B</button>
-        <button onclick="setTaxCut(1000)" id="btn1000" class="bg-light-blue text-dark-blue px-2 py-3 rounded-lg text-lg font-bold">$1T</button>
+        <button onclick="setTaxCut(20, 'mobile')" id="btn20Mobile" class="bg-light-blue text-dark-blue px-2 py-3 rounded-lg text-lg font-bold">$20B</button>
+        <button onclick="setTaxCut(100, 'mobile')" id="btn100Mobile" class="bg-selected-blue text-white px-2 py-3 rounded-lg text-lg font-bold">$100B</button>
+        <button onclick="setTaxCut(1000, 'mobile')" id="btn1000Mobile" class="bg-light-blue text-dark-blue px-2 py-3 rounded-lg text-lg font-bold">$1T</button>
       </div>
       <input type="hidden" id="taxCut" value="100">
     </div>
@@ -352,19 +352,18 @@
       return rate % 1 === 0 ? `${rate}%` : `${rate.toFixed(1)}%`;
     }
 
-    function setTaxCut(amount) {
-      const buttons = document.querySelectorAll('[id^="btn"]');
+    function setTaxCut(amount, device) {
+      const buttons = document.querySelectorAll(`[id^="btn"]`);
       buttons.forEach(button => {
         button.classList.remove('bg-selected-blue', 'text-white');
         button.classList.add('bg-light-blue', 'text-dark-blue');
       });
 
-      let selectedButtonId = "btn" + amount;
-      const clickedButton = document.getElementById(selectedButtonId);
-      if (clickedButton) {
-        clickedButton.classList.remove('bg-light-blue', 'text-dark-blue');
-        clickedButton.classList.add('bg-selected-blue', 'text-white');
-      }
+      const selectedButtons = document.querySelectorAll(`[id="btn${amount}Desktop"], [id="btn${amount}Mobile"]`);
+      selectedButtons.forEach(button => {
+        button.classList.remove('bg-light-blue', 'text-dark-blue');
+        button.classList.add('bg-selected-blue', 'text-white');
+      });
 
       document.getElementById('taxCut').value = amount;
       calculateTaxes();
