@@ -72,7 +72,7 @@
         </div>
         <div>
           <label class="block text-sm font-medium mb-1">Income ($):</label>
-          <input type="number" id="income" value="80000" class="w-full p-2 border rounded" oninput="calculateTaxes()">
+          <input type="text" id="income" value="80,000" class="w-full p-2 border rounded" oninput="formatAndCalculate()">
         </div>
       </div>
     </div>
@@ -233,8 +233,22 @@
       return { totalCurrentTax, totalNewTax };
     }
 
+    function formatAndCalculate() {
+      formatIncome();
+      calculateTaxes();
+    }
+
+    function formatIncome() {
+      const incomeField = document.getElementById('income');
+      let value = incomeField.value.replace(/,/g, '');
+      if (!isNaN(value) && value !== '') {
+        incomeField.value = parseFloat(value).toLocaleString('en-US');
+      }
+    }
+
     function calculateTaxes() {
-      const income = parseFloat(document.getElementById('income').value) || 0;
+      const incomeField = document.getElementById('income');
+      let income = parseFloat(incomeField.value.replace(/,/g, '')) || 0;
       const maritalStatus = document.getElementById('maritalStatus').value;
       const selectedBrackets = TAX_BRACKETS[maritalStatus];
 
