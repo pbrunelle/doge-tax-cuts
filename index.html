@@ -220,14 +220,6 @@
     <!-- Sticky Tax Summary -->
     <div class="sticky-summary bg-white shadow-lg rounded-t-lg p-4 border-t">
       <div class="grid grid-cols-3 gap-2 text-center">
-        <div class="p-2 rounded current-cell">
-          <div class="text-sm font-medium mb-1">Current Tax</div>
-          <div id="currentTaxMobile" class="text-lg"></div>
-        </div>
-        <div class="p-2 rounded new-cell">
-          <div class="text-sm font-medium mb-1">New Tax</div>
-          <div id="newTaxMobile" class="text-lg"></div>
-        </div>
         <div class="p-2 rounded savings-cell">
           <div class="text-sm font-medium mb-1">Savings</div>
           <div id="savingsMobile" class="text-lg"></div>
@@ -554,10 +546,6 @@
       document.getElementById(`savings${device.charAt(0).toUpperCase() + device.slice(1)}`).textContent = 
         `$${Math.round(totalCurrentTax - totalNewTax).toLocaleString('en-US')}`;
 
-      document.getElementById('currentTaxMobile').textContent = 
-        `$${Math.round(totalCurrentTax).toLocaleString('en-US')}`;
-      document.getElementById('newTaxMobile').textContent = 
-        `$${Math.round(totalNewTax).toLocaleString('en-US')}`;
       document.getElementById('savingsMobile').textContent = 
         `$${Math.round(totalCurrentTax - totalNewTax).toLocaleString('en-US')}`;
     }
