@@ -47,26 +47,57 @@
     background-color: #d0eaff; /* Yellow background for emphasis */
     font-weight: bold;
   }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 50;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+  }
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body class="bg-gray-50">
   <div class="max-w-4xl mx-auto p-6 space-y-6">
     <!-- Tax Cut Options -->	
-
-
-	<div class="bg-white rounded-lg shadow p-6">
-	  <h2 class="text-xl font-bold mb-4">How Much Federal Spending Will DOGE Cut?</h2>
-	  <div class="grid grid-cols-3 gap-4 mb-4">
-		<button onclick="setTaxCut(20)" id="btn20" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$20B</button>
-		<button onclick="setTaxCut(100)" id="btn100" class="bg-selected-blue text-white px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$100B</button>
-		<button onclick="setTaxCut(1000)" id="btn1000" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$1T</button>
-	  </div>
-	  <input type="hidden" id="taxCut" value="100">
-	</div>
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-bold mb-4">How Much Federal Spending Will DOGE Cut?</h2>
+      <div class="grid grid-cols-3 gap-4 mb-4">
+        <button onclick="setTaxCut(20)" id="btn20" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$20B</button>
+        <button onclick="setTaxCut(100)" id="btn100" class="bg-selected-blue text-white px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$100B</button>
+        <button onclick="setTaxCut(1000)" id="btn1000" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$1T</button>
+      </div>
+      <input type="hidden" id="taxCut" value="100">
+    </div>
 
     <!-- Input Fields -->
     <div class="bg-white rounded-lg shadow p-6">
-	  <h2 class="text-xl font-bold mb-4">How Much Will You Save?</h2>
+      <h2 class="text-xl font-bold mb-4">How Much Will You Save?</h2>
       <div class="grid grid-cols-2 gap-6">
         <div>
           <label class="block text-sm font-medium mb-1">Marital Status:</label>
@@ -106,6 +137,34 @@
       <div class="overflow-x-auto">
         <table class="w-full breakdown-table" id="breakdownTable"></table>
       </div>
+    </div>
+
+    <!-- Info Link -->
+    <footer class="text-center mt-6">
+      <button id="infoBtn" class="text-blue-500 hover:underline">Learn More</button>
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div id="infoModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 class="text-xl font-bold mb-4">Information on Computations and Assumptions</h2>
+      <section>
+        <h3 class="text-lg font-bold mb-2">Computations</h3>
+        <p>Details on how the tax calculations are performed, including the tax brackets and the formulas used.</p>
+        <!-- Add more detailed explanations as needed -->
+      </section>
+      <section>
+        <h3 class="text-lg font-bold mb-2">Assumptions</h3>
+        <p>Information on the assumptions made in the calculations, such as the tax rate reduction per $100B in savings.</p>
+        <!-- Add more detailed explanations as needed -->
+      </section>
+      <section>
+        <h3 class="text-lg font-bold mb-2">References</h3>
+        <p>Links to the sources of information used in the calculations, such as IRS tax brackets and CBO reports.</p>
+        <!-- Add more detailed explanations as needed -->
+      </section>
     </div>
   </div>
 
@@ -282,6 +341,32 @@
 
     // Initialize calculations on page load
     window.onload = calculateTaxes;
+
+    // Get the modal
+    var modal = document.getElementById("infoModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("infoBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
   </script>
 </body>
 </html>
