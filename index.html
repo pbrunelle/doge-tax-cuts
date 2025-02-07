@@ -29,65 +29,88 @@
       background-color: #f9f9f9;
     }
 
-  .bg-light-blue {
-    background-color: #f9f9f9; /* Example: Light Blue */
-    color: #1a2027; /* Dark Blue Text for contrast on light blue */
-  }
+    .bg-light-blue {
+      background-color: #f9f9f9; /* Example: Light Blue */
+      color: #1a2027; /* Dark Blue Text for contrast on light blue */
+    }
 
-  .bg-selected-blue {
-    background-color: #007bff; /* Brighter, bolder blue */
-    color: #ffffff; /* White Text for contrast on blue */
-  }
+    .bg-selected-blue {
+      background-color: #007bff; /* Brighter, bolder blue */
+      color: #ffffff; /* White Text for contrast on blue */
+    }
 
-  .text-dark-blue {
-    color: #1a2027;
-  }
+    .text-dark-blue {
+      color: #1a2027;
+    }
 
-  .savings-cell {
-    background-color: #d0eaff; /* Yellow background for emphasis */
-    font-weight: bold;
-  }
+    .savings-cell {
+      background-color: #d0eaff; /* Yellow background for emphasis */
+      font-weight: bold;
+    }
 
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 50;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 600px;
-    border-radius: 8px;
-  }
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  .separator {
-    margin: 0 2px;
-    color: #aaa;
-  }
-</style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .separator {
+      margin: 0 2px;
+      color: #aaa;
+    }
+
+    .desktop-only {
+      display: block;
+    }
+
+    .mobile-only {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      .desktop-only {
+        display: none;
+      }
+      .mobile-only {
+        display: block;
+      }
+      .grid-cols-3 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+      .max-w-4xl {
+        max-width: 100%;
+      }
+    }
+  </style>
 </head>
 <body class="bg-gray-50">
-  <div class="max-w-4xl mx-auto p-6 space-y-6">
+  <div class="max-w-4xl mx-auto p-6 space-y-6 desktop-only">
     <!-- Tax Cut Options -->	
     <div class="bg-white rounded-lg shadow p-6">
       <h2 class="text-xl font-bold mb-4">How Much Federal Spending Will DOGE Cut?</h2>
@@ -162,6 +185,80 @@
       </a>
       <span class="separator"></span>
       <span class="ml-4">Pierre Brunelle</span>
+    </footer>
+  </div>
+
+  <div class="max-w-lg mx-auto p-4 space-y-4 mobile-only">
+    <!-- Header -->
+    <h1 class="text-xl font-bold text-center mb-4">How Much Will DOGE Save You?</h1>
+
+    <!-- Tax Cut Options -->
+    <div class="bg-white rounded-lg shadow p-4">
+      <h2 class="text-lg font-bold mb-3">Federal Spending Cut</h2>
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="setTaxCut(20)" id="btn20" class="bg-light-blue text-dark-blue px-2 py-3 rounded-lg text-lg font-bold">$20B</button>
+        <button onclick="setTaxCut(100)" id="btn100" class="bg-selected-blue text-white px-2 py-3 rounded-lg text-lg font-bold">$100B</button>
+        <button onclick="setTaxCut(1000)" id="btn1000" class="bg-light-blue text-dark-blue px-2 py-3 rounded-lg text-lg font-bold">$1T</button>
+      </div>
+      <input type="hidden" id="taxCut" value="100">
+    </div>
+
+    <!-- Input Fields -->
+    <div class="bg-white rounded-lg shadow p-4">
+      <div class="space-y-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Marital Status:</label>
+          <select id="maritalStatus" class="w-full p-2 border rounded text-lg" oninput="calculateTaxes()">
+            <option value="single">Single</option>
+            <option value="married" selected>Married (Jointly)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Income ($):</label>
+          <input type="text" id="income" value="100,000" class="w-full p-2 border rounded text-lg" oninput="formatAndCalculate()">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Tax Reduction:</label>
+          <select id="taxReduction" class="w-full p-2 border rounded text-lg" oninput="calculateTaxes()">
+            <option value="all" selected>All Brackets</option>
+            <option value="top4">Top 4 Brackets</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticky Tax Summary -->
+    <div class="sticky-summary bg-white shadow-lg rounded-t-lg p-4 border-t">
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="p-2 rounded current-cell">
+          <div class="text-sm font-medium mb-1">Current Tax</div>
+          <div id="currentTax" class="text-lg"></div>
+        </div>
+        <div class="p-2 rounded new-cell">
+          <div class="text-sm font-medium mb-1">New Tax</div>
+          <div id="newTax" class="text-lg"></div>
+        </div>
+        <div class="p-2 rounded savings-cell">
+          <div class="text-sm font-medium mb-1">Savings</div>
+          <div id="savings" class="text-lg"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tax Breakdown -->
+    <div class="bg-white rounded-lg shadow p-4 overflow-x-auto">
+      <h2 class="text-lg font-bold mb-3">Tax Breakdown</h2>
+      <div id="breakdownTableMobile"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-sm pb-20">
+      <button id="infoBtn" class="text-blue-500 hover:underline">Learn More</button>
+      <span class="mx-2">|</span>
+      <a href="https://github.com/pbrunelle/doge-tax-cuts" target="_blank" class="text-black hover:underline">
+        GitHub
+      </a>
+      <div class="mt-2">Pierre Brunelle</div>
     </footer>
   </div>
 
