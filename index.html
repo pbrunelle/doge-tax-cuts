@@ -109,7 +109,10 @@
     }
   </style>
 </head>
+
 <body class="bg-gray-50">
+
+  <!-- Desktop only -->
   <div class="max-w-4xl mx-auto p-6 space-y-6 desktop-only">
     <!-- Tax Cut Options -->	
     <div class="bg-white rounded-lg shadow p-6">
@@ -174,6 +177,7 @@
     </div>
   </div>
 
+  <!-- Mobile only -->
   <div class="max-w-lg mx-auto p-4 space-y-4 mobile-only">
     <!-- Header -->
     <h1 class="text-xl font-bold text-center mb-4">How Much Will DOGE Save You?</h1>
@@ -218,15 +222,15 @@
       <div class="grid grid-cols-3 gap-2 text-center">
         <div class="p-2 rounded current-cell">
           <div class="text-sm font-medium mb-1">Current Tax</div>
-          <div id="currentTax" class="text-lg"></div>
+          <div id="currentTaxMobile" class="text-lg"></div>
         </div>
         <div class="p-2 rounded new-cell">
           <div class="text-sm font-medium mb-1">New Tax</div>
-          <div id="newTax" class="text-lg"></div>
+          <div id="newTaxMobile" class="text-lg"></div>
         </div>
         <div class="p-2 rounded savings-cell">
           <div class="text-sm font-medium mb-1">Savings</div>
-          <div id="savings" class="text-lg"></div>
+          <div id="savingsMobile" class="text-lg"></div>
         </div>
       </div>
     </div>
@@ -424,6 +428,66 @@
       return { totalCurrentTax, totalNewTax };
     }
 
+    function renderBreakdownTableMobile(currentBreakdown, newBreakdown) {
+      const table = document.getElementById('breakdownTableMobile');
+      let html = `
+        <table class="w-full breakdown-table">
+          <thead>
+            <tr>
+              <th>Bracket</th>
+              <th>Range</th>
+              <th>Taxable</th>
+              <th class="current-cell">Rate (Current)</th>
+              <th class="current-cell">Tax (Current)</th>
+              <th class="new-cell">Rate (New)</th>
+              <th class="new-cell">Tax (New)</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      let totalTaxable = 0;
+      let totalCurrentTax = 0;
+      let totalNewTax = 0;
+
+      currentBreakdown.forEach((cur, i) => {
+        const nw = newBreakdown[i] || {};
+        totalTaxable += cur.taxable;
+        totalCurrentTax += cur.tax;
+        totalNewTax += nw.tax || 0;
+
+        html += `
+          <tr>
+            <td>${cur.bracket}</td>
+            <td>${cur.range}</td>
+            <td>$${Math.round(cur.taxable).toLocaleString('en-US')}</td>
+            <td class="current-cell">${cur.rate}</td>
+            <td class="current-cell">$${Math.round(cur.tax).toLocaleString('en-US')}</td>
+            <td class="new-cell">${nw.rate || ''}</td>
+            <td class="new-cell">$${Math.round(nw.tax || 0).toLocaleString('en-US')}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2" class="text-right font-medium">Total</td>
+              <td>$${Math.round(totalTaxable).toLocaleString('en-US')}</td>
+              <td class="current-cell"></td>
+              <td class="current-cell">$${Math.round(totalCurrentTax).toLocaleString('en-US')}</td>
+              <td class="new-cell"></td>
+              <td class="new-cell">$${Math.round(totalNewTax).toLocaleString('en-US')}</td>
+            </tr>
+          </tfoot>
+        </table>
+      `;
+
+      table.innerHTML = html;
+      return { totalCurrentTax, totalNewTax };
+    }
+
     function formatAndCalculate() {
       formatIncome();
       calculateTaxes();
@@ -449,12 +513,20 @@
       const newBreakdown = calculateBracketTax(income, adjustBrackets(selectedBrackets, taxCut, reductionType));
       
       const { totalCurrentTax, totalNewTax } = renderBreakdownTable(currentBreakdown, newBreakdown);
+      renderBreakdownTableMobile(currentBreakdown, newBreakdown);
 
       document.getElementById('currentTax').textContent = 
         `$${Math.round(totalCurrentTax).toLocaleString('en-US')}`;
       document.getElementById('newTax').textContent = 
         `$${Math.round(totalNewTax).toLocaleString('en-US')}`;
       document.getElementById('savings').textContent = 
+        `$${Math.round(totalCurrentTax - totalNewTax).toLocaleString('en-US')}`;
+
+      document.getElementById('currentTaxMobile').textContent = 
+        `$${Math.round(totalCurrentTax).toLocaleString('en-US')}`;
+      document.getElementById('newTaxMobile').textContent = 
+        `$${Math.round(totalNewTax).toLocaleString('en-US')}`;
+      document.getElementById('savingsMobile').textContent = 
         `$${Math.round(totalCurrentTax - totalNewTax).toLocaleString('en-US')}`;
     }
 
