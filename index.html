@@ -234,7 +234,7 @@
             bracket: index,
             range: `${bracket.min.toLocaleString()} - ${bracket.max === Infinity ? '∞' : bracket.max.toLocaleString()}`,
             taxable,
-            rate: (bracket.rate * 100).toFixed(0) + '%',
+            rate: formatRate(bracket.rate * 100),
             tax
           });
           remaining -= taxable;
@@ -255,6 +255,10 @@
         max: b.max,
         rate: reductionType === 'all' || index >= 3 ? Math.max(b.rate - rateReduction, 0) : b.rate
       }));
+    }
+
+    function formatRate(rate) {
+      return rate % 1 === 0 ? `${rate}%` : `${rate.toFixed(1)}%`;
     }
 
     function setTaxCut(amount) {
