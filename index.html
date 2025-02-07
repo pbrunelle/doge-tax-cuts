@@ -138,7 +138,8 @@
         </div>
         <div>
           <label class="block text-sm font-medium mb-1">Income ($):</label>
-          <input type="text" id="incomeDesktop" value="100,000" class="w-full p-2 border rounded" oninput="formatAndCalculate('desktop')">
+          <input type="range" id="incomeDesktop" min="0" max="1000000" value="100000" class="w-full" oninput="formatAndCalculate('desktop')">
+          <div id="incomeValueDesktop" class="text-center mt-2">$100,000</div>
         </div>
         <div>
           <label class="block text-sm font-medium mb-1">Tax Reduction:</label>
@@ -205,7 +206,8 @@
         </div>
         <div>
           <label class="block text-sm font-medium mb-1">Income ($):</label>
-          <input type="text" id="incomeMobile" value="100,000" class="w-full p-2 border rounded text-lg" oninput="formatAndCalculate('mobile')">
+          <input type="range" id="incomeMobile" min="0" max="1000000" value="100000" class="w-full" oninput="formatAndCalculate('mobile')">
+          <div id="incomeValueMobile" class="text-center mt-2">$100,000</div>
         </div>
         <div>
           <label class="block text-sm font-medium mb-1">Tax Reduction:</label>
@@ -520,15 +522,13 @@
 
     function formatIncome(device) {
       const incomeField = document.getElementById(`income${device.charAt(0).toUpperCase() + device.slice(1)}`);
-      let value = incomeField.value.replace(/,/g, '');
-      if (!isNaN(value) && value !== '') {
-        incomeField.value = parseFloat(value).toLocaleString('en-US');
-      }
+      let value = incomeField.value;
+      document.getElementById(`incomeValue${device.charAt(0).toUpperCase() + device.slice(1)}`).textContent = `$${parseFloat(value).toLocaleString('en-US')}`;
     }
 
     function calculateTaxes(device) {
       const incomeField = document.getElementById(`income${device.charAt(0).toUpperCase() + device.slice(1)}`);
-      let income = parseFloat(incomeField.value.replace(/,/g, '')) || 0;
+      let income = parseFloat(incomeField.value) || 0;
       const selectedBrackets = TAX_BRACKETS[document.getElementById(`maritalStatus${device.charAt(0).toUpperCase() + device.slice(1)}`).value];
       const taxCut = parseFloat(document.getElementById(`taxCut${device.charAt(0).toUpperCase() + device.slice(1)}`).value);
       const reductionType = document.getElementById(`taxReduction${device.charAt(0).toUpperCase() + device.slice(1)}`).value;
