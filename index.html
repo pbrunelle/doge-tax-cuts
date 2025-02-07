@@ -26,17 +26,17 @@
       background-color: #f9f9f9;
     }
     .new-cell {
-      background-color: #e3f2fd;
+      background-color: #9ad4fd;
     }
 
   .bg-light-blue {
-    background-color: #e0f2f7; /* Example: Light Blue */
+    background-color: #f9f9f9; /* Example: Light Blue */
     color: #1a2027; /* Dark Blue Text for contrast on light blue */
   }
 
   .bg-selected-blue {
-    background-color: #e3f2fd; /* Selected Blue */
-    color: #1a2027; /* Dark Blue Text for contrast on light blue */
+    background-color: #9ad4fd; /* Blue */
+    color: #1a2027; /* White Text for contrast on blue */
   }
 
   .text-dark-blue {
@@ -53,9 +53,10 @@
 	  <h2 class="text-xl font-bold mb-4">How Much Federal Spending Will DOGE Cut?</h2>
 	  <div class="grid grid-cols-3 gap-4 mb-4">
 		<button onclick="setTaxCut(20)" id="btn20" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$20B</button>
-		<button onclick="setTaxCut(100)" id="btn100" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200 selected">$100B</button>
+		<button onclick="setTaxCut(100)" id="btn100" class="bg-selected-blue text-white px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$100B</button>
 		<button onclick="setTaxCut(1000)" id="btn1000" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$1T</button>
 	  </div>
+	  <input type="hidden" id="taxCut" value="100">
 	</div>
 
     <!-- Input Fields -->
@@ -156,21 +157,20 @@
       }));
     }
 
-    function setTaxCut(amount) {		
-		    const buttons = document.querySelectorAll('[id^="btn"]');
-    buttons.forEach(button => {
-      button.classList.remove('bg-selected-blue', 'hover:bg-blue-200');
-      button.classList.add('bg-light-blue', 'hover:bg-blue-200', 'text-dark-blue'); // Added text color reset
-    });
+    function setTaxCut(amount) {
+      const buttons = document.querySelectorAll('[id^="btn"]');
+      buttons.forEach(button => {
+        button.classList.remove('bg-selected-blue', 'text-white');
+        button.classList.add('bg-light-blue', 'text-dark-blue');
+      });
 
-    let selectedButtonId = "btn" + amount;
-    const clickedButton = document.getElementById(selectedButtonId);
-    if (clickedButton) {
-      clickedButton.classList.remove('bg-light-blue', 'hover:bg-blue-200', 'text-dark-blue');
-      clickedButton.classList.add('bg-selected-blue', 'hover:bg-blue-200');
-      selectedButton = clickedButton;
-    }
-  
+      let selectedButtonId = "btn" + amount;
+      const clickedButton = document.getElementById(selectedButtonId);
+      if (clickedButton) {
+        clickedButton.classList.remove('bg-light-blue', 'text-dark-blue');
+        clickedButton.classList.add('bg-selected-blue', 'text-white');
+      }
+
       document.getElementById('taxCut').value = amount;
       calculateTaxes();
     }
