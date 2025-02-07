@@ -199,7 +199,7 @@
 
     <!-- Tax Cut Options -->
     <div class="bg-white rounded-lg shadow p-4">
-      <h2 class="text-lg font-bold mb-3">Federal Spending Cut</h2>
+      <h2 class="text-lg font-bold mb-3">Federal Waste Cut</h2>
       <div class="flex justify-between space-x-2">
         <button onclick="setTaxCut(20, 'mobile')" id="btn20Mobile" class="flex-1 bg-light-blue text-dark-blue px-2 py-3 rounded-lg text-lg font-bold">$20B</button>
         <button onclick="setTaxCut(100, 'mobile')" id="btn100Mobile" class="flex-1 bg-selected-blue text-white px-2 py-3 rounded-lg text-lg font-bold">$100B</button>
@@ -210,6 +210,7 @@
 
     <!-- Input Fields -->
     <div class="bg-white rounded-lg shadow p-4">
+      <h2 class="text-lg font-bold mb-3">You</h2>
       <div class="space-y-3">
         <div>
           <label class="block text-sm font-medium mb-1">Marital Status:</label>
@@ -235,7 +236,7 @@
 
     <!-- Sticky Tax Summary -->
     <div class="sticky-summary bg-white shadow-lg rounded-t-lg p-4 border-t">
-      <div class="grid grid-cols-3 gap-2 text-center">
+      <div class="grid grid-cols-1 gap-2 text-center">
         <div class="p-2 rounded savings-cell">
           <div class="text-sm font-medium mb-1">Savings</div>
           <div id="savingsMobile" class="text-lg"></div>
@@ -553,19 +554,22 @@
       const { totalCurrentTax, totalNewTax } = renderBreakdownTable(currentBreakdown, newBreakdown, device);
       renderBreakdownTableMobile(currentBreakdown, newBreakdown);
 
-      document.getElementById(`currentTax${device.charAt(0).toUpperCase() + device.slice(1)}`).textContent = 
+      document.getElementById("currentTaxDesktop").textContent = 
         `$${Math.round(totalCurrentTax).toLocaleString('en-US')}`;
-      document.getElementById(`newTax${device.charAt(0).toUpperCase() + device.slice(1)}`).textContent = 
+      document.getElementById("newTaxDesktop").textContent = 
         `$${Math.round(totalNewTax).toLocaleString('en-US')}`;
-      document.getElementById(`savings${device.charAt(0).toUpperCase() + device.slice(1)}`).textContent = 
+      document.getElementById("savingsDesktop").textContent = 
         `$${Math.round(totalCurrentTax - totalNewTax).toLocaleString('en-US')}`;
 
-      document.getElementById('savingsMobile').textContent = 
+      document.getElementById("savingsMobile").textContent = 
         `$${Math.round(totalCurrentTax - totalNewTax).toLocaleString('en-US')}`;
     }
 
     // Initialize calculations on page load
-    window.onload = () => calculateTaxes('desktop');
+    window.onload = () => {
+      calculateTaxes('desktop');
+      calculateTaxes('mobile');
+    };
 
     // Get the modal
     var modal = document.getElementById("infoModal");
