@@ -13,17 +13,18 @@
       margin-bottom: 15px;
     }
     .breakdown-table {
-      font-size: 0.875rem;
+      font-size: 1rem;
       width: 100%;
+      margin-bottom: 10px;
     }
     .breakdown-table th, .breakdown-table td {
-      padding: 6px 4px;
-      text-align: right;
+      padding: 8px 6px;
+      text-align: left;
       white-space: nowrap;
     }
     .breakdown-table th {
       background-color: #f0f0f0;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
     }
     .current-cell {
       background-color: #f9f9f9;
@@ -116,8 +117,6 @@
       </div>
     </div>
 
-
-
     <!-- Sticky Tax Summary -->
     <div class="sticky-summary bg-white shadow-lg rounded-t-lg p-4 border-t">
       <div class="grid grid-cols-3 gap-2 text-center">
@@ -138,8 +137,8 @@
 
     <!-- Tax Breakdown -->
     <div class="bg-white rounded-lg shadow p-4 overflow-x-auto">
-        <h2 class="text-lg font-bold mb-3">Tax Breakdown</h2>
-        <table class="breakdown-table" id="breakdownTable"></table>
+      <h2 class="text-lg font-bold mb-3">Tax Breakdown</h2>
+      <div id="breakdownTable"></div>
     </div>
 
     <!-- Footer -->
@@ -265,18 +264,18 @@
     function renderBreakdownTable(currentBreakdown, newBreakdown) {
       const table = document.getElementById('breakdownTable');
       let html = `
-        <thead>
-          <tr>
-            <th>Bracket</th>
-            <th>Range</th>
-            <th>Taxable</th>
-            <th class="current-cell">Rate (Current)</th>
-            <th class="current-cell">Tax (Current)</th>
-            <th class="new-cell">Rate (New)</th>
-            <th class="new-cell">Tax (New)</th>
-          </tr>
-        </thead>
-        <tbody>
+        <table class="breakdown-table">
+          <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+        </table>
       `;
 
       let totalTaxable = 0;
@@ -290,30 +289,66 @@
         totalNewTax += nw.tax || 0;
 
         html += `
-          <tr>
-            <td>${cur.bracket}</td>
-            <td>${cur.range}</td>
-            <td>$${Math.round(cur.taxable).toLocaleString('en-US')}</td>
-            <td class="current-cell">${cur.rate}</td>
-            <td class="current-cell">$${Math.round(cur.tax).toLocaleString('en-US')}</td>
-            <td class="new-cell">${nw.rate || ''}</td>
-            <td class="new-cell">$${Math.round(nw.tax || 0).toLocaleString('en-US')}</td>
-          </tr>
+          <table class="breakdown-table">
+            <colgroup>
+              <col style="width: 50%;">
+              <col style="width: 50%;">
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>Bracket ${cur.bracket}</th>
+                <td></td>
+              </tr>
+              <tr>
+                <th>Range</th>
+                <td>${cur.range}</td>
+              </tr>
+              <tr>
+                <th>Taxable</th>
+                <td>$${Math.round(cur.taxable).toLocaleString('en-US')}</td>
+              </tr>
+              <tr class="current-cell">
+                <th>Rate (Current)</th>
+                <td>${cur.rate}</td>
+              </tr>
+              <tr class="current-cell">
+                <th>Tax (Current)</th>
+                <td>$${Math.round(cur.tax).toLocaleString('en-US')}</td>
+              </tr>
+              <tr class="new-cell">
+                <th>Rate (New)</th>
+                <td>${nw.rate !== undefined ? formatRate(nw.rate * 100) : ''}</td>
+              </tr>
+              <tr class="new-cell">
+                <th>Tax (New)</th>
+                <td>$${Math.round(nw.tax || 0).toLocaleString('en-US')}</td>
+              </tr>
+            </tbody>
+          </table>
         `;
       });
 
       html += `
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="2" class="text-right font-medium">Total</td>
-            <td>$${Math.round(totalTaxable).toLocaleString('en-US')}</td>
-            <td class="current-cell"></td>
-            <td class="current-cell">$${Math.round(totalCurrentTax).toLocaleString('en-US')}</td>
-            <td class="new-cell"></td>
-            <td class="new-cell">$${Math.round(totalNewTax).toLocaleString('en-US')}</td>
-          </tr>
-        </tfoot>
+        <table class="breakdown-table">
+          <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+          </colgroup>
+          <tbody>
+            <tr>
+              <th>Total Taxable</th>
+              <td>$${Math.round(totalTaxable).toLocaleString('en-US')}</td>
+            </tr>
+            <tr class="current-cell">
+              <th>Total Tax (Current)</th>
+              <td>$${Math.round(totalCurrentTax).toLocaleString('en-US')}</td>
+            </tr>
+            <tr class="new-cell">
+              <th>Total Tax (New)</th>
+              <td>$${Math.round(totalNewTax).toLocaleString('en-US')}</td>
+            </tr>
+          </tbody>
+        </table>
       `;
 
       table.innerHTML = html;
