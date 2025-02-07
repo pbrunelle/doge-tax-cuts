@@ -98,7 +98,7 @@
     <!-- Input Fields -->
     <div class="bg-white rounded-lg shadow p-6">
       <h2 class="text-xl font-bold mb-4">How Much Will You Save?</h2>
-      <div class="grid grid-cols-2 gap-6">
+      <div class="grid grid-cols-3 gap-6">
         <div>
           <label class="block text-sm font-medium mb-1">Marital Status:</label>
           <select id="maritalStatus" class="w-full p-2 border rounded" oninput="calculateTaxes()">
@@ -109,6 +109,13 @@
         <div>
           <label class="block text-sm font-medium mb-1">Income ($):</label>
           <input type="text" id="income" value="100,000" class="w-full p-2 border rounded" oninput="formatAndCalculate()">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Tax Reduction:</label>
+          <select id="taxReduction" class="w-full p-2 border rounded" oninput="calculateTaxes()">
+            <option value="all" selected>All Brackets</option>
+            <option value="top4">Top 4 Brackets</option>
+          </select>
         </div>
       </div>
     </div>
@@ -191,11 +198,8 @@
       ]
     };
 
-    // https://www.cbo.gov/budget-options/58634
-    // Raise all tax rates on ordinary income by 1 percentage point
-    // Under the first alternative, all statutory tax rates on ordinary income (income subject to the regular rate schedule) would increase by 1 percentage point. For example, in 2023, the top rate of 37 percent would increase to 38 percent, and in 2026, the top rate of 39.6 percent would increase to 40.6 percent.
-    // 2025 = $111.3B
-    const REVENUE_REDUCTION_PER_PERCENT = 111.3;
+    const REVENUE_REDUCTION_PER_PERCENT_ALL = 111.3;
+    const REVENUE_REDUCTION_PER_PERCENT_TOP4 = 0.5 * 57.3;
 
     function calculateBracketTax(income, brackets) {
       let remaining = income;
@@ -221,12 +225,15 @@
       return breakdown;
     }
 
-    function adjustBrackets(brackets, savings) {
-      const rateReduction = savings / REVENUE_REDUCTION_PER_PERCENT / 100;
-      return brackets.map(b => ({
+    function adjustBrackets(brackets, savings, reductionType) {
+      const rateReduction = reductionType === 'all' 
+        ? savings / REVENUE_REDUCTION_PER_PERCENT_ALL / 100 
+        : savings / REVENUE_REDUCTION_PER_PERCENT_TOP4 / 100;
+
+      return brackets.map((b, index) => ({
         min: b.min,
         max: b.max,
-        rate: Math.max(b.rate - rateReduction, 0)
+        rate: reductionType === 'all' || index >= 3 ? Math.max(b.rate - rateReduction, 0) : b.rate
       }));
     }
 
@@ -325,9 +332,10 @@
       const maritalStatus = document.getElementById('maritalStatus').value;
       const selectedBrackets = TAX_BRACKETS[maritalStatus];
       const taxCut = parseFloat(document.getElementById('taxCut').value);
+      const reductionType = document.getElementById('taxReduction').value;
 
       const currentBreakdown = calculateBracketTax(income, selectedBrackets);
-      const newBreakdown = calculateBracketTax(income, adjustBrackets(selectedBrackets, taxCut));
+      const newBreakdown = calculateBracketTax(income, adjustBrackets(selectedBrackets, taxCut, reductionType));
       
       const { totalCurrentTax, totalNewTax } = renderBreakdownTable(currentBreakdown, newBreakdown);
 
