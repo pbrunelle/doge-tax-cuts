@@ -22,6 +22,20 @@
     .breakdown-table th {
       background-color: #f0f0f0;
     }
+    .breakdown-table-mobile {
+      font-size: 1rem;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .breakdown-table-mobile th, .breakdown-table-mobile td {
+      padding: 8px 6px;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .breakdown-table-mobile th {
+      background-color: #f0f0f0;
+      font-size: 0.875rem;
+    }
     .current-cell {
       background-color: #f9f9f9;
     }
@@ -424,7 +438,7 @@
     function renderBreakdownTableMobile(currentBreakdown, newBreakdown) {
       const table = document.getElementById('breakdownTableMobile');
       let html = `
-        <table class="breakdown-table">
+        <table class="breakdown-table-mobile">
           <colgroup>
             <col style="width: 50%;">
             <col style="width: 50%;">
@@ -449,7 +463,7 @@
         totalNewTax += nw.tax || 0;
 
         html += `
-          <table class="breakdown-table">
+          <table class="breakdown-table-mobile">
             <colgroup>
               <col style="width: 50%;">
               <col style="width: 50%;">
@@ -489,7 +503,7 @@
       });
 
       html += `
-        <table class="breakdown-table">
+        <table class="breakdown-table-mobile">
           <colgroup>
             <col style="width: 50%;">
             <col style="width: 50%;">
