@@ -25,10 +25,10 @@
     .breakdown-table-mobile {
       font-size: 1rem;
       width: 100%;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
     .breakdown-table-mobile th, .breakdown-table-mobile td {
-      padding: 8px 6px;
+      padding: 2px 6px;
       text-align: left;
       white-space: nowrap;
     }
@@ -125,7 +125,7 @@
     /* Custom slider styling */
     input[type="range"] {
       -webkit-appearance: none;
-      height: 20px;
+      height: 15px;
       border-radius: 10px;
       background: #e5e7eb;
       outline: none;
@@ -134,22 +134,22 @@
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 20px;
-      height: 20px;
+      width: 15px;
+      height: 15px;
       border-radius: 50%;
       background: #007bff;
       cursor: pointer;
-      border: 2px solid white;
+      border: 1px solid white;
       box-shadow: 0 0 2px rgba(0,0,0,0.2);
     }
 
     input[type="range"]::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
+      width: 15px;
+      height: 15px;
       border-radius: 50%;
       background: #007bff;
       cursor: pointer;
-      border: 2px solid white;
+      border: 1px solid white;
       box-shadow: 0 0 2px rgba(0,0,0,0.2);
     }
 
@@ -234,7 +234,7 @@
   <!-- Mobile only -->
   <div class="max-w-lg mx-auto p-4 space-y-5 mobile-only">
     <!-- Header -->
-    <h1 class="text-xl font-bold text-center mb-4">How Much Will DOGE Save You?</h1>
+    <h1 class="text-xl font-bold text-center mb-4">How Much Can DOGE Save You?</h1>
 
     <!-- Tax Cut Options -->
     <div class="bg-white rounded-lg shadow p-4">
@@ -486,20 +486,7 @@
 
     function renderBreakdownTableMobile(currentBreakdown, newBreakdown) {
       const table = document.getElementById('breakdownTableMobile');
-      let html = `
-        <table class="breakdown-table-mobile">
-          <colgroup>
-            <col style="width: 50%;">
-            <col style="width: 50%;">
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Category</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-        </table>
-      `;
+      let html = "";
 
       let totalTaxable = 0;
       let totalCurrentTax = 0;
@@ -512,16 +499,14 @@
         totalNewTax += nw.tax || 0;
 
         html += `
+          <h3 class="font-medium">Bracket ${cur.bracket}</h3>
+          <div class="mt-3">
           <table class="breakdown-table-mobile">
             <colgroup>
               <col style="width: 50%;">
               <col style="width: 50%;">
             </colgroup>
             <tbody>
-              <tr>
-                <th>Bracket ${cur.bracket}</th>
-                <td></td>
-              </tr>
               <tr>
                 <th>Range</th>
                 <td>${cur.range}</td>
@@ -530,20 +515,20 @@
                 <th>Taxable</th>
                 <td>$${Math.round(cur.taxable).toLocaleString('en-US')}</td>
               </tr>
-              <tr class="current-cell">
-                <th>Rate (Current)</th>
+              <tr>
+                <th>Current Rate</th>
                 <td>${cur.rate}</td>
               </tr>
-              <tr class="current-cell">
-                <th>Tax (Current)</th>
+              <tr>
+                <th>Current Tax</th>
                 <td>$${Math.round(cur.tax).toLocaleString('en-US')}</td>
               </tr>
-              <tr class="new-cell">
-                <th>Rate (New)</th>
+              <tr>
+                <th>Rate After Cut</th>
                 <td>${nw.rate !== undefined ? formatRate(nw.rate * 100) : ''}</td>
               </tr>
-              <tr class="new-cell">
-                <th>Tax (New)</th>
+              <tr">
+                <th>Tax After Cut</th>
                 <td>$${Math.round(nw.tax || 0).toLocaleString('en-US')}</td>
               </tr>
             </tbody>
@@ -552,6 +537,8 @@
       });
 
       html += `
+        <h3 class="font-medium">Total</h3>
+        <div class="mt-3">
         <table class="breakdown-table-mobile">
           <colgroup>
             <col style="width: 50%;">
@@ -559,15 +546,15 @@
           </colgroup>
           <tbody>
             <tr>
-              <th>Total Taxable</th>
+              <th>Taxable</th>
               <td>$${Math.round(totalTaxable).toLocaleString('en-US')}</td>
             </tr>
-            <tr class="current-cell">
-              <th>Total Tax (Current)</th>
+            <tr>
+              <th>Current Tax</th>
               <td>$${Math.round(totalCurrentTax).toLocaleString('en-US')}</td>
             </tr>
-            <tr class="new-cell">
-              <th>Total Tax (New)</th>
+            <tr>
+              <th>Tax After Cuts</th>
               <td>$${Math.round(totalNewTax).toLocaleString('en-US')}</td>
             </tr>
           </tbody>
