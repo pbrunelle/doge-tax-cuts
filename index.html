@@ -234,11 +234,11 @@
   <!-- Mobile only -->
   <div class="max-w-lg mx-auto p-4 space-y-4 mobile-only">
     <!-- Header -->
-    <h1 class="text-2xl font-bold text-center mb-4">How Much Will DOGE Save You?</h1>
+    <h1 class="text-xl font-bold text-center mb-4">How Much Will DOGE Save You?</h1>
 
     <!-- Tax Cut Options -->
     <div class="bg-white rounded-lg shadow p-4">
-      <h2 class="text-lg font-bold mb-3">Cut federal waste by</h2>
+      <h2 class="text-base font-medium mb-3">Cut federal waste by</h2>
       <div class="flex justify-between space-x-2">
         <button onclick="setTaxCut(20, 'mobile')" id="btn20Mobile" class="flex-1 bg-light-blue text-dark-blue px-2 py-3 rounded-lg text-lg font-bold">$20B</button>
         <button onclick="setTaxCut(100, 'mobile')" id="btn100Mobile" class="flex-1 bg-selected-blue text-white px-2 py-3 rounded-lg text-lg font-bold">$100B</button>
@@ -246,22 +246,22 @@
       </div>
       <input type="hidden" id="taxCutMobile" value="100">
       <div class="mt-5">
-        <label class="block text-lg font-bold font-medium mb-3">Use the savings to reduce income tax rates</label>
+        <label class="block text-base font-medium mb-3">Use savings to reduce income tax rates</label>
         <div class="flex space-x-2">
-          <button onclick="setBrackets('all', 'mobile')" id="allMobile" class="flex-1 bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-lg font-bold">All Brackets</button>
-          <button onclick="setBrackets('top4', 'mobile')" id="top4Mobile" class="flex-1 bg-selected-blue text-white px-4 py-2 rounded-lg text-lg font-bold">Top 4 Brackets</button>
+          <button onclick="setBrackets('all', 'mobile')" id="allMobile" class="flex-1 bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-base font-bold">All Brackets</button>
+          <button onclick="setBrackets('top4', 'mobile')" id="top4Mobile" class="flex-1 bg-selected-blue text-white px-4 py-2 rounded-lg text-base font-bold">Top 4</button>
         </div>
       </div>
     </div>
 
     <!-- Input Fields -->
     <div class="bg-white rounded-lg shadow p-4">
-      <h2 class="text-lg font-bold mb-3">Your Status and Income</h2>
+      <h2 class="text-base font-medium mb-3">Your Status and Income</h2>
       <div class="space-y-3">
         <div>
           <div class="flex space-x-2">
-            <button onclick="setMaritalStatus('single', 'mobile')" id="singleMobile" class="flex-1 bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-lg font-bold">Single</button>
-            <button onclick="setMaritalStatus('married', 'mobile')" id="marriedMobile" class="flex-1 bg-selected-blue text-white px-4 py-2 rounded-lg text-lg font-bold">Married</button>
+            <button onclick="setMaritalStatus('single', 'mobile')" id="singleMobile" class="flex-1 bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-base font-bold">Single</button>
+            <button onclick="setMaritalStatus('married', 'mobile')" id="marriedMobile" class="flex-1 bg-selected-blue text-white px-4 py-2 rounded-lg text-base font-bold">Married</button>
           </div>
         </div>
         <div>
@@ -286,7 +286,7 @@
     <div class="sticky-summary bg-white shadow-lg rounded-t-lg p-4 border-t">
       <div class="grid grid-cols-1 gap-2s text-center">
         <div class="p-2 rounded savings-cell">
-          <div class="text-2xl font-medium mb-1">Your Savings</div>
+          <div class="text-xl font-medium mb-1">Your Savings</div>
           <div id="savingsMobile" class="text-2xl font-bold"></div>
         </div>
       </div>
