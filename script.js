@@ -246,7 +246,7 @@ function calculateTaxes(device) {
 
   // Update the new text block
   document.getElementById("dogeCutMobile").textContent = `$${taxCut}B`;
-  document.getElementById("taxBracketsMobile").textContent = reductionType === 'all' ? 'all' : 'top 4';
+  document.getElementById("taxBracketsMobile").textContent = reductionType === 'all' ? 'all' : 'the top 4';
   document.getElementById("maritalStatusTextMobile").textContent = maritalStatus === 'single' ? 'single' : 'married';
   document.getElementById("incomeTextMobile").textContent = `$${income.toLocaleString('en-US')}`;
   document.getElementById("savingsTextMobile").textContent = `$${savings}`;
