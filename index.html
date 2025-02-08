@@ -533,6 +533,8 @@
         });
         document.getElementById(`${status}Mobile`).classList.replace('bg-light-blue','bg-selected-blue');
         document.getElementById(`${status}Mobile`).classList.replace('text-dark-blue','text-white');
+        // Sync desktop
+        document.getElementById('maritalStatusDesktop').value = status;
       }
       calculateTaxes(device);
     }
@@ -545,6 +547,8 @@
         });
         document.getElementById(`${bracket}Mobile`).classList.replace('bg-light-blue','bg-selected-blue');
         document.getElementById(`${bracket}Mobile`).classList.replace('text-dark-blue','text-white');
+        // Sync desktop
+        document.getElementById('taxReductionDesktop').value = bracket;
       }
       calculateTaxes(device);
     }
@@ -579,6 +583,54 @@
       document.getElementById("savingsMobile").textContent = 
         `$${Math.round(totalCurrentTax - totalNewTax).toLocaleString('en-US')}`;
     }
+
+    // Synchronize Income: update the counterpart on input change
+    document.getElementById('incomeDesktop').addEventListener('input', function() {
+      if(document.getElementById('incomeMobile').value !== this.value) {
+        document.getElementById('incomeMobile').value = this.value;
+        document.getElementById('incomeValueMobile').textContent = `$${parseFloat(this.value).toLocaleString('en-US')}`;
+      }
+    });
+    document.getElementById('incomeMobile').addEventListener('input', function() {
+      if(document.getElementById('incomeDesktop').value !== this.value) {
+        document.getElementById('incomeDesktop').value = this.value;
+        document.getElementById('incomeValueDesktop').textContent = `$${parseFloat(this.value).toLocaleString('en-US')}`;
+      }
+    });
+
+    // Synchronize Marital Status: update mobile when desktop changes
+    document.getElementById('maritalStatusDesktop').addEventListener('change', function() {
+      const status = this.value;
+      if(status === 'single') {
+        document.getElementById('singleMobile').classList.replace('bg-light-blue','bg-selected-blue');
+        document.getElementById('singleMobile').classList.replace('text-dark-blue','text-white');
+        document.getElementById('marriedMobile').classList.replace('bg-selected-blue','bg-light-blue');
+        document.getElementById('marriedMobile').classList.replace('text-white','text-dark-blue');
+      } else {
+        document.getElementById('marriedMobile').classList.replace('bg-light-blue','bg-selected-blue');
+        document.getElementById('marriedMobile').classList.replace('text-dark-blue','text-white');
+        document.getElementById('singleMobile').classList.replace('bg-selected-blue','bg-light-blue');
+        document.getElementById('singleMobile').classList.replace('text-white','text-dark-blue');
+      }
+      calculateTaxes('desktop');
+    });
+
+    // Synchronize Tax Reduction: update mobile when desktop changes
+    document.getElementById('taxReductionDesktop').addEventListener('change', function() {
+      const reduction = this.value;
+      if(reduction === 'all'){
+        document.getElementById('allMobile').classList.replace('bg-light-blue','bg-selected-blue');
+        document.getElementById('allMobile').classList.replace('text-dark-blue','text-white');
+        document.getElementById('top4Mobile').classList.replace('bg-selected-blue','bg-light-blue');
+        document.getElementById('top4Mobile').classList.replace('text-white','text-dark-blue');
+      } else {
+        document.getElementById('top4Mobile').classList.replace('bg-light-blue','bg-selected-blue');
+        document.getElementById('top4Mobile').classList.replace('text-dark-blue','text-white');
+        document.getElementById('allMobile').classList.replace('bg-selected-blue','bg-light-blue');
+        document.getElementById('allMobile').classList.replace('text-white','text-dark-blue');
+      }
+      calculateTaxes('desktop');
+    });
 
     // Initialize calculations on page load
     window.onload = () => {
