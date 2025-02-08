@@ -1,58 +1,44 @@
-.breakdown-table th, .breakdown-table td {
-  padding: 6px;
-  border: 1px solid #ddd;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.breakdown-table th {
-  background-color: #f0f0f0;
-}
-
-.breakdown-table-mobile {
-  font-size: 1rem;
+/* Table styles */
+.breakdown-table {
   width: 100%;
   margin-bottom: 20px;
+  font-size: 1rem;
 }
 
-.breakdown-table-mobile th, .breakdown-table-mobile td {
+.breakdown-table th, 
+.breakdown-table td {
   padding: 2px 6px;
   text-align: left;
   white-space: nowrap;
 }
 
-.breakdown-table-mobile th {
+.breakdown-table th {
   background-color: #f0f0f0;
   font-size: 0.875rem;
 }
 
-.current-cell {
-  background-color: #f9f9f9;
-}
-
-.new-cell {
-  background-color: #f9f9f9;
-}
-
+/* Button states */
 .bg-light-blue {
-  background-color: #e5e7eb; /* Example: Light Blue */
-  color: #1a2027; /* Dark Blue Text for contrast on light blue */
+  background-color: #e5e7eb;
+  color: #1a2027;
 }
 
 .bg-selected-blue {
-  background-color: #007bff; /* Brighter, bolder blue */
-  color: #ffffff; /* White Text for contrast on blue */
+  background-color: #007bff;
+  color: #ffffff;
 }
 
 .text-dark-blue {
   color: #1a2027;
 }
 
+/* Savings display */
 .savings-cell {
-  background-color: #d0eaff; /* Yellow background for emphasis */
+  background-color: #d0eaff;
   font-weight: bold;
 }
 
+/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -61,9 +47,9 @@
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
   background-color: rgba(0, 0, 0, 0.5);
 }
+
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto;
@@ -73,59 +59,31 @@
   max-width: 600px;
   border-radius: 8px;
 }
+
 .close {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
-}
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
   cursor: pointer;
 }
-.separator {
-  margin: 0 2px;
-  color: #aaa;
+
+.close:hover {
+  color: black;
 }
 
-.desktop-only {
-  display: block;
-}
-
-.mobile-only {
-  display: none;
-}
-
-@media (max-width: 640px) {
-  .desktop-only {
-    display: none;
-  }
-  .mobile-only {
-    display: block;
-  }
-  .grid-cols-3 {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-  .max-w-4xl {
-    max-width: 100%;
-  }
-}
-
-/* Custom slider styling */
+/* Slider - critical for iOS touch functionality */
 input[type="range"] {
   -webkit-appearance: none;
   height: 15px;
   border-radius: 10px;
   background: #e5e7eb;
   outline: none;
-  padding: 10px 0; /* Add padding to increase catchment area */
+  padding: 10px 0;
 }
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  appearance: none;
   width: 15px;
   height: 15px;
   border-radius: 50%;
@@ -140,11 +98,11 @@ input[type="range"]::-moz-range-thumb {
   height: 15px;
   border-radius: 50%;
   background: #007bff;
-  cursor: pointer;
   border: 1px solid white;
   box-shadow: 0 0 2px rgba(0,0,0,0.2);
 }
 
+/* Display elements */
 .income-display {
   font-size: 1.25rem;
   font-weight: bold;
@@ -153,16 +111,22 @@ input[type="range"]::-moz-range-thumb {
   margin: 0.5rem 0;
 }
 
+.header-sticky {
+  position: sticky;
+  top: 0;
+  background-color: #f9f9f9;
+  z-index: 10;
+  padding: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+
+/* Links */
 a {
   color: blue;
   text-decoration: underline;
 }
 
-.mobile-header-sticky {
-  position: sticky;
-  top: 0;
-  background-color: #f9f9f9; /* Or any background color you prefer */
-  z-index: 10; /* Ensure it stays on top of other content */
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
+.separator {
+  margin: 0 2px;
+  color: #aaa;
 }

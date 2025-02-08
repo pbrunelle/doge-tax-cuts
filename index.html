@@ -1,213 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How Much Will DOGE Save You?</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-  <link href="styles.css" rel="stylesheet">
-</head>
-
-<body class="bg-gray-50">
-
-  <!-- Desktop only -->
-  <div class="max-w-4xl mx-auto p-6 space-y-6 desktop-only">
-    <!-- Tax Cut Options -->	
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-xl font-bold mb-4">How Much Federal Spending Will DOGE Cut?</h2>
-      <div class="grid grid-cols-3 gap-4 mb-4">
-        <button onclick="setTaxCut(20, 'desktop')" id="btn20Desktop" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$20B</button>
-        <button onclick="setTaxCut(100, 'desktop')" id="btn100Desktop" class="bg-selected-blue text-white px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$100B</button>
-        <button onclick="setTaxCut(1000, 'desktop')" id="btn1000Desktop" class="bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-200">$1T</button>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Much Will DOGE Save You?</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+  </head>
+  <body class="bg-gray-50">
+    <div class="max-w-2xl mx-auto p-4 space-y-5">
+      <div class="header-sticky">
+        <h1 class="text-xl font-bold text-center">How Much Can DOGE Save You?</h1>
       </div>
-      <input type="hidden" id="taxCutDesktop" value="100">
-    </div>
-
-    <!-- Input Fields -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-xl font-bold mb-4">How Much Will You Save?</h2>
-      <div class="grid grid-cols-3 gap-6">
-        <div>
-          <label class="block text-sm font-medium mb-1">Marital Status:</label>
-          <select id="maritalStatusDesktop" class="w-full p-2 border rounded" oninput="calculateTaxes('desktop')">
-            <option value="single">Single</option>
-            <option value="married" selected>Married (Jointly)</option>
-          </select>
+      <div class="bg-white rounded-lg shadow-md p-4">
+        <h2 class="text-base font-medium mb-3">Cut federal waste by</h2>
+        <div class="flex justify-between space-x-2">
+          <button onclick="setTaxCut(20)" id="btn20" class="flex-1 bg-light-blue text-dark-blue py-2 rounded-lg text-base font-bold">$20B</button>
+          <button onclick="setTaxCut(100)" id="btn100" class="flex-1 bg-selected-blue text-white py-2 rounded-lg text-base font-bold">$100B</button>
+          <button onclick="setTaxCut(1000)" id="btn1000" class="flex-1 bg-light-blue text-dark-blue py-2 rounded-lg text-base font-bold">$1T</button>
         </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Income ($):</label>
-          <input type="range" id="incomeDesktop" min="0" max="1000000" value="100000" class="w-full" oninput="formatAndCalculate('desktop')">
-          <div id="incomeValueDesktop" class="text-center mt-2">$100,000</div>
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Tax Reduction:</label>
-          <select id="taxReductionDesktop" class="w-full p-2 border rounded" oninput="calculateTaxes('desktop')">
-            <option value="all" selected>All Brackets</option>
-            <option value="top4">Top 4 Brackets</option>
-          </select>
-        </div>
-      </div>
-    </div>
-	
-    <!-- Tax Summary -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <div class="grid grid-cols-3 gap-4">
-        <div class="p-4 rounded current-cell">
-          <h4 class="font-medium mb-2">Current Tax</h4>
-          <div id="currentTaxDesktop" class="text-xl"></div>
-        </div>
-        <div class="p-4 rounded new-cell">
-          <h4 class="font-medium mb-2">New Tax (After Cut)</h4>
-          <div id="newTaxDesktop" class="text-xl"></div>
-        </div>
-        <div class="p-4 rounded savings-cell">
-          <h4 class="font-medium mb-2">Annual Savings</h4>
-          <div id="savingsDesktop" class="text-xl"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tax Breakdown -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-xl font-bold mb-4">Detailed Tax Breakdown</h2>
-      <div class="overflow-x-auto">
-        <table class="w-full breakdown-table" id="breakdownTableDesktop"></table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Mobile only -->
-  <div class="max-w-lg mx-auto p-4 space-y-5 mobile-only">
-    <!-- Header -->
-    <div class="mobile-header-sticky">
-      <h1 class="text-xl font-bold text-center">How Much Can DOGE Save You?</h1>
-    </div>
-
-    <!-- Tax Cut Options -->
-    <div class="bg-white rounded-lg shadow-md p-4">
-      <h2 class="text-base font-medium mb-3">Cut federal waste by</h2>
-      <div class="flex justify-between space-x-2">
-        <button onclick="setTaxCut(20, 'mobile')" id="btn20Mobile" class="flex-1 bg-light-blue text-dark-blue py-2 rounded-lg text-base font-bold">$20B</button>
-        <button onclick="setTaxCut(100, 'mobile')" id="btn100Mobile" class="flex-1 bg-selected-blue text-white py-2 rounded-lg text-base font-bold">$100B</button>
-        <button onclick="setTaxCut(1000, 'mobile')" id="btn1000Mobile" class="flex-1 bg-light-blue text-dark-blue py-2 rounded-lg text-base font-bold">$1T</button>
-      </div>
-      <input type="hidden" id="taxCutMobile" value="100">
-      <div class="mt-5">
-        <label class="block text-base font-medium mb-3">Use savings to reduce income tax rates</label>
-        <div class="flex space-x-2">
-          <button onclick="setBrackets('all', 'mobile')" id="allMobile" class="flex-1 bg-light-blue text-dark-blue py-2 rounded-lg text-base font-bold">All Brackets</button>
-          <button onclick="setBrackets('top4', 'mobile')" id="top4Mobile" class="flex-1 bg-selected-blue text-white py-2 rounded-lg text-base font-bold">Top 4</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Input Fields -->
-    <div class="bg-white rounded-lg shadow-md p-4">
-      <h2 class="text-base font-medium mb-3">Your status and income</h2>
-      <div class="space-y-3">
-        <div>
+        <input type="hidden" id="taxCut" value="100">
+        <div class="mt-5">
+          <label class="block text-base font-medium mb-3">Use savings to reduce income tax rates</label>
           <div class="flex space-x-2">
-            <button onclick="setMaritalStatus('single', 'mobile')" id="singleMobile" class="flex-1 bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-base font-bold">Single</button>
-            <button onclick="setMaritalStatus('married', 'mobile')" id="marriedMobile" class="flex-1 bg-selected-blue text-white px-4 py-2 rounded-lg text-base font-bold">Married</button>
-          </div>
-        </div>
-        <div>
-          <div class="income-display" id="incomeValueMobile">$100,000</div>
-          <input type="range" 
-                 id="incomeMobile" 
-                 min="0" 
-                 max="1000000" 
-                 value="100000" 
-                 step="1000"
-                 class="w-full" 
-                 oninput="formatAndCalculate('mobile')">
-          <div class="flex justify-between text-sm text-gray-600 px-1">
-            <span>$0</span>
-            <span>$1M</span>
+            <button onclick="setBrackets('all')" id="all" class="flex-1 bg-light-blue text-dark-blue py-2 rounded-lg text-base font-bold">All Brackets</button>
+            <button onclick="setBrackets('top4')" id="top4" class="flex-1 bg-selected-blue text-white py-2 rounded-lg text-base font-bold">Top 4</button>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Sticky Tax Summary -->
-    <div class="sticky-summary bg-white shadow-lg rounded-lg p-4 border-t">
-      <div class="grid grid-cols-1 gap-2s text-center">
-        <div class="p-2 rounded savings-cell">
-          <div class="text-lg font-medium mb-1">Your Savings</div>
-          <div id="savingsMobile" class="text-xl font-bold"></div>
+      <div class="bg-white rounded-lg shadow-md p-4">
+        <h2 class="text-base font-medium mb-3">Your status and income</h2>
+        <div class="space-y-3">
+          <div>
+            <div class="flex space-x-2">
+              <button onclick="setMaritalStatus('single')" id="single" class="flex-1 bg-light-blue text-dark-blue px-4 py-2 rounded-lg text-base font-bold">Single</button>
+              <button onclick="setMaritalStatus('married')" id="married" class="flex-1 bg-selected-blue text-white px-4 py-2 rounded-lg text-base font-bold">Married</button>
+            </div>
+          </div>
+          <div>
+            <div class="income-display" id="incomeValue">$100,000</div>
+            <input type="range" 
+                   id="income" 
+                   min="0" 
+                   max="1000000" 
+                   value="100000" 
+                   step="1000"
+                   class="w-full" 
+                   oninput="formatAndCalculate()">
+            <div class="flex justify-between text-sm text-gray-600 px-1">
+              <span>$0</span>
+              <span>$1M</span>
+            </div>
+          </div>
         </div>
       </div>
+      <div class="sticky-summary bg-white shadow-lg rounded-lg p-4 border-t">
+        <div class="grid grid-cols-1 gap-2s text-center">
+          <div class="p-2 rounded savings-cell">
+            <div class="text-lg font-medium mb-1">Your Savings</div>
+            <div id="savings" class="text-xl font-bold"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-md p-4 text-center mt-5 mb-5">
+        <p>
+          Elon Musk and his team at the Department of Government Efficiency (DOGE) are working to 
+          "cut wasteful and fraudulent federal spending and eliminate excessive regulations."
+          As of February 8 2025, DOGE 
+          <a href="https://dogegov.com/dogeclock.html" target="_blank">claims</a> to have cut $37B of wasteful spending, with a stated target of $2T.
+          One criticism of DOGE is that its impact would be minimal. This calculator helps you understand its impact on your finances.
+        </p>
+        <p class="mt-3">
+          Assuming DOGE cuts federal spending by <b><span id="dogeCut"></span></b> and that all savings are used to lower personal income taxes rates from 
+          <b><span id="taxBrackets"></span> brackets</b>, as someone who is 
+          <b><span id="maritalStatusText"></span></b> and earns 
+          <b><span id="incomeText"></span></b> a year, you'd stand to pay 
+          <b><span id="savingsText"></span></b> less annually in income taxes. How does that sound?
+        </p>
+      </div>
+      <div class="bg-white rounded-lg shadow p-4 overflow-x-auto">
+        <h2 class="text-base font-medium mb-3">Your tax breakdown</h2>
+        <div id="breakdownTable"></div>
+      </div>
+      <div class="text-center mt-6">
+        <button id="infoBtn" class="text-blue-500 hover:underline">Learn More</button>
+        <span class="separator"></span>
+        <a href="https://github.com/pbrunelle/doge-tax-cuts" target="_blank" class="ml-4 text-black hover:underline">
+          <svg class="inline-block w-6 h-6 mr-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.11.82-.26.82-.577v-2.17c-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.09-.746.083-.73.083-.73 1.205.084 1.84 1.237 1.84 1.237 1.07 1.835 2.807 1.305 3.492.998.108-.775.42-1.305.763-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.467-2.38 1.235-3.22-.123-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.398 3-.403 1.02.005 2.043.137 3 .403 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.24 2.873.118 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.803 5.625-5.475 5.92.43.37.823 1.102.823 2.222v3.293c0 .32.22.694.825.577C20.565 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          GitHub
+        </a>
+        <span class="separator"></span>
+        <span class="ml-4">Pierre Brunelle</span>
+      </div>
     </div>
-
-    <!-- New Text Block -->
-    <div class="bg-white rounded-lg shadow-md p-4 text-center mt-5 mb-5">
-      <p>
-        Elon Musk and his team at the Department of Government Efficiency (DOGE) are working to 
-        "cut wasteful and fraudulent federal spending and eliminate excessive regulations."
-        As of February 8 2025, DOGE 
-        <a href="https://dogegov.com/dogeclock.html" target="_blank">claims</a> to have cut $37B of wasteful spending, with a stated target of $2T.
-        One criticism of DOGE is that its impact would be minimal. This calculator helps you understand its impact on your finances.
-      </p>
-      <p class="mt-3">
-        Assuming DOGE cuts federal spending by <b><span id="dogeCutMobile"></span></b> and that all savings are used to lower personal income taxes rates from 
-        <b><span id="taxBracketsMobile"></span> brackets</b>, as someone who is 
-        <b><span id="maritalStatusTextMobile"></span></b> and earns 
-        <b><span id="incomeTextMobile"></span></b> a year, you'd stand to pay 
-        <b><span id="savingsTextMobile"></span></b> less annually in income taxes. How does that sound?
-      </p>
+    <div id="infoModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 class="text-xl font-bold mb-4">Information on Computations and Assumptions</h2>
+        <section>
+          <h3 class="text-lg font-bold mb-2">Computations</h3>
+          <ul class="list-disc pl-5">
+            <li>2025 tax brackets are used in all calculations.</li>
+            <li>For simplicity, exemptions and deductions are not modeled.</li>
+          </ul>
+        </section>
+        <section>
+          <h3 class="text-lg font-bold mb-2">Assumptions</h3>
+          <ul class="list-disc pl-5">
+            <li>All savings are assumed to be passed to taxpayers in the form of income tax cuts.</li>
+            <li>When choosing to reduce all brackets, it is estimated that a 1 percentage point reduction costs $111.3B.</li>
+            <li>When choosing to reduce only the top 4 brackets, it is estimated that a 2 percentage point reduction costs $57.3B.</li>
+          </ul>
+        </section>
+        <section>
+          <h3 class="text-lg font-bold mb-2">References</h3>
+          <ul class="list-disc pl-5">
+            <li><a href="https://www.cbo.gov/budget-options/58634" target="_blank">CBO Budget Options</a></li>
+            <li><a href="https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2025" target="_blank">IRS Tax Inflation Adjustments for Tax Year 2025</a></li>
+          </ul>
+        </section>
+      </div>
     </div>
-
-    <!-- Tax Breakdown -->
-    <div class="bg-white rounded-lg shadow p-4 overflow-x-auto">
-      <h2 class="text-base font-medium mb-3">Your tax breakdown</h2>
-      <div id="breakdownTableMobile"></div>
-    </div>
-  </div>
-
-  <!-- Info Link -->
-  <footer class="text-center mt-6">
-    <button id="infoBtn" class="text-blue-500 hover:underline">Learn More</button>
-    <span class="separator"></span>
-    <a href="https://github.com/pbrunelle/doge-tax-cuts" target="_blank" class="ml-4 text-black hover:underline">
-      <svg class="inline-block w-6 h-6 mr-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.11.82-.26.82-.577v-2.17c-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.09-.746.083-.73.083-.73 1.205.084 1.84 1.237 1.84 1.237 1.07 1.835 2.807 1.305 3.492.998.108-.775.42-1.305.763-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.467-2.38 1.235-3.22-.123-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.398 3-.403 1.02.005 2.043.137 3 .403 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.24 2.873.118 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.803 5.625-5.475 5.92.43.37.823 1.102.823 2.222v3.293c0 .32.22.694.825.577C20.565 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
-      </svg>
-      GitHub
-    </a>
-    <span class="separator"></span>
-    <span class="ml-4">Pierre Brunelle</span>
-  </footer>
-
-  <!-- Modal -->
-  <div id="infoModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2 class="text-xl font-bold mb-4">Information on Computations and Assumptions</h2>
-      <section>
-        <h3 class="text-lg font-bold mb-2">Computations</h3>
-        <ul class="list-disc pl-5">
-          <li>2025 tax brackets are used in all calculations.</li>
-          <li>For simplicity, exemptions and deductions are not modeled.</li>
-        </ul>
-      </section>
-      <section>
-        <h3 class="text-lg font-bold mb-2">Assumptions</h3>
-        <ul class="list-disc pl-5">
-          <li>All savings are assumed to be passed to taxpayers in the form of income tax cuts.</li>
-          <li>When choosing to reduce all brackets, it is estimated that a 1 percentage point reduction costs $111.3B.</li>
-          <li>When choosing to reduce only the top 4 brackets, it is estimated that a 2 percentage point reduction costs $57.3B.</li>
-        </ul>
-      </section>
-      <section>
-        <h3 class="text-lg font-bold mb-2">References</h3>
-        <ul class="list-disc pl-5">
-          <li><a href="https://www.cbo.gov/budget-options/58634" target="_blank">CBO Budget Options</a></li>
-          <li><a href="https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2025" target="_blank">IRS Tax Inflation Adjustments for Tax Year 2025</a></li>
-        </ul>
-      </section>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
