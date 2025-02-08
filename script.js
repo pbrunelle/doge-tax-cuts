@@ -241,8 +241,15 @@ function calculateTaxes(device) {
   document.getElementById("savingsDesktop").textContent = 
     `$${Math.round(totalCurrentTax - totalNewTax).toLocaleString('en-US')}`;
 
-  document.getElementById("savingsMobile").textContent = 
-    `$${Math.round(totalCurrentTax - totalNewTax).toLocaleString('en-US')}`;
+  const savings = Math.round(totalCurrentTax - totalNewTax).toLocaleString('en-US');
+  document.getElementById("savingsMobile").textContent = `$${savings}`;
+
+  // Update the new text block
+  document.getElementById("dogeCutMobile").textContent = `$${taxCut}B`;
+  document.getElementById("taxBracketsMobile").textContent = reductionType === 'all' ? 'all' : 'top 4';
+  document.getElementById("maritalStatusTextMobile").textContent = maritalStatus === 'single' ? 'single' : 'married';
+  document.getElementById("incomeTextMobile").textContent = `$${income.toLocaleString('en-US')}`;
+  document.getElementById("savingsTextMobile").textContent = `$${savings}`;
 }
 
 // Synchronize Income: update the counterpart on input change
