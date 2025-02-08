@@ -151,3 +151,8 @@ input[type="range"]::-moz-range-thumb {
   text-align: center;
   margin: 0.5rem 0;
 }
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
