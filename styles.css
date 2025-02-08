@@ -156,3 +156,12 @@ a {
   color: blue;
   text-decoration: underline;
 }
+
+.mobile-header-sticky {
+  position: sticky;
+  top: 0;
+  background-color: #f9f9f9; /* Or any background color you prefer */
+  z-index: 10; /* Ensure it stays on top of other content */
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
