@@ -18,6 +18,7 @@ jobs:
       - run: |
           aws s3 cp . s3://usaidcostsyou/ \
           --recursive \
+          --exclude ".*/" \
           --exclude "*/" \
           --exclude "README.md" \
           --exclude .gitignore 
