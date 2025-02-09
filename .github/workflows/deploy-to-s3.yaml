@@ -16,6 +16,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY_ID}}
           aws-region: us-east-2
       - run: |
-          aws s3 cp index.html s3://usaidcostsyou/
-          aws s3 cp script.js s3://usaidcostsyou/
-          aws s3 cp styles.css s3://usaidcostsyou/
+          aws s3 cp . s3://usaidcostsyou/ \
+          --recursive \
+          --exclude "*/" \
+          --exclude "README.md" \
+          --exclude .gitignore 
