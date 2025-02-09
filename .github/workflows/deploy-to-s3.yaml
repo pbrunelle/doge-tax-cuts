@@ -23,5 +23,5 @@ jobs:
           --include "*.html" \
           --include favicon.ico \
           --include script.js \
-          --include style.css \
+          --include styles.css \
           --include site.webmanifest
